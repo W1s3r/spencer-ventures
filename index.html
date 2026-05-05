@@ -967,7 +967,7 @@ main {
           <select class="todo-select" id="todo-assignee-select">
             <option value="unassigned">Unassigned</option>
             <option value="ethan">Ethan</option>
-            <option value="dad">Dad</option>
+            <option value="dad">Vaughn</option>
           </select>
           <select class="todo-select" id="todo-priority-select">
             <option value="medium">Medium</option>
@@ -985,7 +985,7 @@ main {
         <span class="todo-filter-label">Assignee</span>
         <button class="filter-btn active" id="filter-all" onclick="setTodoFilter('all')">All</button>
         <button class="filter-btn" id="filter-ethan" onclick="setTodoFilter('ethan')">Ethan</button>
-        <button class="filter-btn" id="filter-dad" onclick="setTodoFilter('dad')">Dad</button>
+        <button class="filter-btn" id="filter-dad" onclick="setTodoFilter('dad')">Vaughn</button>
         <button class="filter-btn" id="filter-unassigned" onclick="setTodoFilter('unassigned')">Unassigned</button>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
@@ -1437,7 +1437,7 @@ function sortTodos(list) {
 
 /* ─── Render ─────────────────────────────────────────────────────────────────── */
 function assigneeChipHTML(assignee) {
-  const labels = { ethan: 'Ethan', dad: 'Dad', unassigned: 'Unassigned' };
+  const labels = { ethan: 'Ethan', dad: 'Vaughn', unassigned: 'Unassigned' };
   const classes = { ethan: 'assignee-ethan', dad: 'assignee-dad', unassigned: 'assignee-unassigned' };
   if (assignee === 'unassigned') return ''; // skip unassigned chip to reduce noise
   return `<span class="assignee-chip ${classes[assignee] || 'assignee-unassigned'}">${labels[assignee] || assignee}</span>`;
