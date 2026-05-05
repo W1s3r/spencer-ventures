@@ -979,13 +979,19 @@ main {
         </div>
       </div>
 
-      <!-- Filter bar -->
-      <div class="todo-filter-bar">
+      <!-- Sync bar -->
+      <div class="todo-filter-bar" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:5px">
         <span class="todo-filter-label">Assignee</span>
         <button class="filter-btn active" id="filter-all" onclick="setTodoFilter('all')">All</button>
         <button class="filter-btn" id="filter-ethan" onclick="setTodoFilter('ethan')">Ethan</button>
         <button class="filter-btn" id="filter-dad" onclick="setTodoFilter('dad')">Dad</button>
         <button class="filter-btn" id="filter-unassigned" onclick="setTodoFilter('unassigned')">Unassigned</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="sync-status" id="sync-status" style="font-size:11px;color:var(--text-faint)"></span>
+          <button class="todo-add-btn" id="sync-btn" onclick="syncTasks()" style="display:none">Sync</button>
+        </div>
       </div>
 
       <!-- Active task list -->
@@ -1256,18 +1262,89 @@ const TODO_KEY = 'spencer-ventures-todos';
 let todos = [];
 let todoFilter = 'all';
 let completedOpen = false;
+let hasUnsyncedChanges = false;
 
+// Load tasks: merge git-synced tasks.json with localStorage edits
 function loadTodos() {
+  let localTodos = [];
   try {
     const raw = localStorage.getItem(TODO_KEY);
-    todos = raw ? JSON.parse(raw) : [];
-  } catch(e) {
-    todos = [];
+    localTodos = raw ? JSON.parse(raw) : [];
+  } catch(e) { localTodos = []; }
+
+  // Try loading tasks.json (git-synced source of truth)
+  let syncedTodos = [];
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'tasks.json', false); // synchronous
+    xhr.send();
+    if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
+      syncedTodos = JSON.parse(xhr.responseText);
+    }
+  } catch(e) { syncedTodos = []; }
+
+  // Merge: localStorage wins for tasks with matching IDs (has latest edits),
+  // synced adds any tasks from the other person not yet in localStorage
+  if (syncedTodos.length === 0 && localTodos.length > 0) {
+    todos = localTodos;
+  } else if (localTodos.length === 0 && syncedTodos.length > 0) {
+    todos = syncedTodos;
+  } else {
+    const localMap = new Map(localTodos.map(t => [t.id, t]));
+    const syncedMap = new Map(syncedTodos.map(t => [t.id, t]));
+
+    // Start with all local tasks
+    const merged = new Map(localMap);
+
+    // Add any synced tasks not in local (from the other person)
+    for (const [id, task] of syncedMap) {
+      if (!merged.has(id)) {
+        merged.set(id, task);
+      }
+    }
+
+    todos = Array.from(merged.values());
   }
+
+  saveTodos(); // persist the merged result to localStorage
+  updateSyncStatus();
 }
 
 function saveTodos() {
   localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+  hasUnsyncedChanges = true;
+  updateSyncStatus();
+}
+
+function updateSyncStatus() {
+  const btn = document.getElementById('sync-btn');
+  const status = document.getElementById('sync-status');
+  if (!btn || !status) return;
+  if (hasUnsyncedChanges && todos.length > 0) {
+    btn.style.display = '';
+    status.textContent = 'Unsaved changes';
+    status.style.color = 'var(--accent)';
+  } else {
+    btn.style.display = 'none';
+    status.textContent = '';
+  }
+}
+
+// Copy tasks JSON to clipboard, then auto-save via sync script
+async function syncTasks() {
+  const json = JSON.stringify(todos, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    const status = document.getElementById('sync-status');
+    status.textContent = 'Copied! Run: sync-tasks';
+    status.style.color = 'var(--stage-launched)';
+    hasUnsyncedChanges = false;
+    document.getElementById('sync-btn').style.display = 'none';
+    setTimeout(() => { status.textContent = ''; }, 5000);
+  } catch(e) {
+    // Fallback: show JSON in a prompt
+    prompt('Copy this JSON, then run sync-tasks in terminal:', json);
+  }
 }
 
 function genId() {
