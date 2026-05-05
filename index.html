@@ -47,9 +47,17 @@
   --priority-medium: oklch(52% 0.14 72);
   --priority-low:    oklch(52% 0.010 60);
 
+  --priority-high-bg:   oklch(50% 0.18 25 / 0.10);
+  --priority-medium-bg: oklch(52% 0.14 72 / 0.10);
+  --priority-low-bg:    oklch(52% 0.010 60 / 0.10);
+
   --stale-color:     oklch(52% 0.14 72);
   --stale-bg:        oklch(52% 0.14 72 / 0.08);
   --stale-border:    oklch(52% 0.14 72 / 0.25);
+
+  --overdue-color:   oklch(50% 0.18 25);
+  --overdue-bg:      oklch(50% 0.18 25 / 0.08);
+  --overdue-border:  oklch(50% 0.18 25 / 0.25);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -106,10 +114,49 @@ h1 {
   font-weight: 400;
 }
 
+/* ─── Tab Bar ────────────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  margin-top: 22px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 7px 7px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  letter-spacing: 0.01em;
+  position: relative;
+  bottom: -1px;
+}
+
+.tab-btn:hover {
+  color: var(--text-secondary);
+  background: oklch(95% 0.010 68 / 0.6);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  background: var(--bg);
+  border-color: var(--border-subtle);
+  border-bottom-color: var(--bg);
+  font-weight: 600;
+}
+
+/* ─── Summary Strip ──────────────────────────────────────────────────────────── */
 .summary-strip {
   display: flex;
   gap: 0;
-  margin: 24px 0 0;
+  margin: 18px 0 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -149,6 +196,7 @@ h1 {
 
 .stat-cell.stat-stale .stat-value { color: var(--stale-color); }
 
+/* ─── Toolbar ────────────────────────────────────────────────────────────────── */
 .toolbar {
   display: flex;
   align-items: center;
@@ -229,12 +277,17 @@ h1 {
 
 .sort-select:hover { border-color: var(--border-focus); }
 
+/* ─── Main / Tab Panels ──────────────────────────────────────────────────────── */
 main {
   padding: 20px 36px 56px;
   max-width: 1440px;
   margin: 0 auto;
 }
 
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─── Dashboard Cards ────────────────────────────────────────────────────────── */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -334,9 +387,9 @@ main {
   font-family: "DM Sans", sans-serif;
 }
 
-.priority-mark.high { color: var(--priority-high); background: oklch(50% 0.18 25 / 0.10); }
-.priority-mark.medium { color: var(--priority-medium); background: oklch(52% 0.14 72 / 0.10); }
-.priority-mark.low { color: var(--priority-low); background: oklch(52% 0.010 60 / 0.10); }
+.priority-mark.high   { color: var(--priority-high);   background: var(--priority-high-bg); }
+.priority-mark.medium { color: var(--priority-medium); background: var(--priority-medium-bg); }
+.priority-mark.low    { color: var(--priority-low);    background: var(--priority-low-bg); }
 
 .card-name {
   font-size: 14.5px;
@@ -546,6 +599,315 @@ main {
 
 .detail-link:hover { background: oklch(62% 0.145 72 / 0.16); }
 
+/* ─── To-Do Tab ──────────────────────────────────────────────────────────────── */
+.todo-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Add task form */
+.todo-add-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 4px oklch(40% 0.012 60 / 0.05);
+}
+
+.todo-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.todo-input {
+  flex: 1;
+  min-width: 160px;
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.todo-input:focus { border-color: var(--border-focus); }
+.todo-input::placeholder { color: var(--text-faint); }
+
+.todo-select {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 24px 6px 9px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23997755' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+}
+
+.todo-select:focus { border-color: var(--border-focus); }
+.todo-select:hover { border-color: var(--border-focus); }
+
+.todo-date-input {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  width: 130px;
+}
+
+.todo-date-input:focus { border-color: var(--border-focus); }
+
+.todo-add-btn {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.todo-add-btn:hover { background: oklch(62% 0.145 72 / 0.16); border-color: oklch(62% 0.145 72 / 0.45); }
+
+/* Filter bar */
+.todo-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.todo-filter-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-right: 2px;
+}
+
+/* Task list */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.todo-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 0;
+  font-size: 13px;
+}
+
+/* Task row */
+.todo-row {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 3px oklch(40% 0.012 60 / 0.05);
+  transition: border-color 0.15s, background 0.15s, opacity 0.2s;
+  position: relative;
+}
+
+.todo-row:hover { border-color: var(--border-focus); background: var(--bg-card-hover); }
+.todo-row:hover .todo-delete-btn { opacity: 1; }
+
+.todo-row.todo-complete {
+  opacity: 0.55;
+}
+
+.todo-row.todo-complete .todo-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.todo-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+
+.todo-checkbox:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.todo-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 5px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: translate(-0.5px, -1.5px) rotate(-45deg);
+}
+
+.todo-checkbox:hover:not(:checked) { border-color: var(--border-focus); }
+
+.todo-title {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.1px;
+  min-width: 0;
+}
+
+.todo-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Assignee chip */
+.assignee-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.assignee-ethan {
+  color: var(--stage-pre-launch);
+  background: var(--stage-pre-launch-bg);
+}
+
+.assignee-dad {
+  color: var(--stage-launched);
+  background: var(--stage-launched-bg);
+}
+
+.assignee-unassigned {
+  color: var(--text-faint);
+  background: oklch(92% 0.010 65 / 0.6);
+}
+
+/* Priority lozenge — reuses .priority-mark */
+/* Due date chip */
+.due-chip {
+  font-size: 11px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.due-chip.due-soon {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.due-chip.due-overdue {
+  color: var(--overdue-color);
+  font-weight: 600;
+}
+
+/* Delete button */
+.todo-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.todo-delete-btn:hover {
+  color: var(--overdue-color);
+  background: var(--overdue-bg);
+}
+
+/* Completed section */
+.completed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-faint);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+
+.completed-toggle:hover { color: var(--text-secondary); }
+
+.completed-toggle .chevron {
+  font-size: 9px;
+  transition: transform 0.2s var(--ease-out-quart);
+}
+
+.completed-toggle.open .chevron { transform: rotate(180deg); }
+
+.completed-section { border-top: 1px solid var(--border-subtle); margin-top: 8px; }
+
+.completed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 6px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s var(--ease-out-expo);
+}
+
+.completed-list.open { max-height: 2000px; }
+
 @media (max-width: 900px) {
   header { padding: 24px 20px 0; }
   main   { padding: 16px 20px 48px; }
@@ -553,6 +915,7 @@ main {
   .stat-cell { min-width: 100px; }
   .cards-grid { grid-template-columns: 1fr; }
   h1 { font-size: 23px; }
+  .todo-add-row { flex-wrap: wrap; }
 }
 
 @media (max-width: 600px) {
@@ -562,6 +925,8 @@ main {
   .toolbar-label { display: none; }
   .sort-select { margin-left: 0; }
   h1 { font-size: 20px; }
+  .todo-date-input { width: 100%; }
+  .todo-meta { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -573,15 +938,74 @@ main {
     <h1>Spencer Ventures</h1>
     <span class="header-date" id="header-date"></span>
   </div>
-  <div class="summary-strip" id="summary-strip"></div>
-  <div class="toolbar" id="toolbar"></div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" id="tab-todo" onclick="switchTab('todo')">To-Do</button>
+  </div>
 </header>
 
 <main>
-  <div class="cards-grid" id="cards-grid"></div>
+  <!-- Dashboard Panel -->
+  <div class="tab-panel active" id="panel-dashboard">
+    <div class="summary-strip" id="summary-strip"></div>
+    <div class="toolbar" id="toolbar"></div>
+    <div style="margin-top: 20px;">
+      <div class="cards-grid" id="cards-grid"></div>
+    </div>
+  </div>
+
+  <!-- To-Do Panel -->
+  <div class="tab-panel" id="panel-todo">
+    <div class="todo-layout">
+
+      <!-- Add task form -->
+      <div class="todo-add-form">
+        <div class="todo-add-row">
+          <input type="text" class="todo-input" id="todo-title-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTodo()">
+          <select class="todo-select" id="todo-assignee-select">
+            <option value="unassigned">Unassigned</option>
+            <option value="ethan">Ethan</option>
+            <option value="dad">Dad</option>
+          </select>
+          <select class="todo-select" id="todo-priority-select">
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="low">Low</option>
+          </select>
+          <input type="date" class="todo-date-input" id="todo-due-input">
+          <button class="todo-add-btn" onclick="addTodo()">+ Add Task</button>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="todo-filter-bar">
+        <span class="todo-filter-label">Assignee</span>
+        <button class="filter-btn active" id="filter-all" onclick="setTodoFilter('all')">All</button>
+        <button class="filter-btn" id="filter-ethan" onclick="setTodoFilter('ethan')">Ethan</button>
+        <button class="filter-btn" id="filter-dad" onclick="setTodoFilter('dad')">Dad</button>
+        <button class="filter-btn" id="filter-unassigned" onclick="setTodoFilter('unassigned')">Unassigned</button>
+      </div>
+
+      <!-- Active task list -->
+      <div class="todo-list" id="todo-active-list"></div>
+
+      <!-- Completed section -->
+      <div class="completed-section" id="completed-section" style="display:none">
+        <button class="completed-toggle" id="completed-toggle" onclick="toggleCompleted()">
+          <span class="chevron">&#x25BE;</span>
+          <span id="completed-label">Completed</span>
+        </button>
+        <div class="completed-list" id="todo-completed-list"></div>
+      </div>
+
+    </div>
+  </div>
 </main>
 
 <script>
+/* ─── Dashboard Data ─────────────────────────────────────────────────────────── */
 const BUSINESSES = [
   {
     name: "Patent Launch",
@@ -684,8 +1108,10 @@ const BUSINESSES = [
   }
 ];
 
+/* ─── Dashboard State ────────────────────────────────────────────────────────── */
 const STALE_DAYS = 14;
 const TODAY      = new Date();
+TODAY.setHours(0,0,0,0);
 
 const STAGES     = ['all','pre-launch','research','idea','launched','paused','shelved'];
 const PRIORITIES = ['all','high','medium','low'];
@@ -701,7 +1127,7 @@ function stageClass(stage) { return 'stage-' + stage; }
 function stageLabel(stage) {
   return { 'pre-launch': 'Pre-Launch', launched: 'Launched', research: 'Research', idea: 'Idea', paused: 'Paused', shelved: 'Shelved' }[stage] || stage;
 }
-function formatDate(dateStr) { return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function formatDate(dateStr) { return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 function priorityOrder(p) { return { high: 0, medium: 1, low: 2 }[p] ?? 3; }
 function stageOrder(s) { return { launched: 0, 'pre-launch': 1, research: 2, idea: 3, paused: 4, shelved: 5 }[s] ?? 6; }
 
@@ -814,10 +1240,194 @@ function setStage(s) { filterStage = s; renderToolbar(); renderCards(); }
 function setPriority(p) { filterPriority = p; renderToolbar(); renderCards(); }
 function setSort(s) { sortBy = s; renderCards(); }
 
-document.getElementById('header-date').textContent = TODAY.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+/* ─── Tab Switching ──────────────────────────────────────────────────────────── */
+let activeTab = 'dashboard';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+/* ─── To-Do State & Storage ──────────────────────────────────────────────────── */
+const TODO_KEY = 'spencer-ventures-todos';
+let todos = [];
+let todoFilter = 'all';
+let completedOpen = false;
+
+function loadTodos() {
+  try {
+    const raw = localStorage.getItem(TODO_KEY);
+    todos = raw ? JSON.parse(raw) : [];
+  } catch(e) {
+    todos = [];
+  }
+}
+
+function saveTodos() {
+  localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+/* ─── To-Do Logic ────────────────────────────────────────────────────────────── */
+function addTodo() {
+  const titleEl   = document.getElementById('todo-title-input');
+  const assigneeEl = document.getElementById('todo-assignee-select');
+  const priorityEl = document.getElementById('todo-priority-select');
+  const dueEl     = document.getElementById('todo-due-input');
+
+  const title = titleEl.value.trim();
+  if (!title) { titleEl.focus(); return; }
+
+  todos.push({
+    id:       genId(),
+    title,
+    assignee: assigneeEl.value,
+    priority: priorityEl.value,
+    due:      dueEl.value || null,
+    complete: false,
+    createdAt: new Date().toISOString()
+  });
+
+  saveTodos();
+  titleEl.value = '';
+  dueEl.value   = '';
+  assigneeEl.value = 'unassigned';
+  priorityEl.value = 'medium';
+  titleEl.focus();
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  saveTodos();
+  renderTodos();
+}
+
+function toggleTodo(id) {
+  const t = todos.find(t => t.id === id);
+  if (t) { t.complete = !t.complete; saveTodos(); renderTodos(); }
+}
+
+function setTodoFilter(f) {
+  todoFilter = f;
+  ['all','ethan','dad','unassigned'].forEach(key => {
+    document.getElementById('filter-' + key).classList.toggle('active', key === f);
+  });
+  renderTodos();
+}
+
+function toggleCompleted() {
+  completedOpen = !completedOpen;
+  const toggle = document.getElementById('completed-toggle');
+  const list   = document.getElementById('todo-completed-list');
+  toggle.classList.toggle('open', completedOpen);
+  list.classList.toggle('open', completedOpen);
+}
+
+/* ─── Due date helpers ───────────────────────────────────────────────────────── */
+function daysUntilDue(dueDateStr) {
+  if (!dueDateStr) return null;
+  const due = new Date(dueDateStr + 'T00:00:00');
+  return Math.floor((due - TODAY) / 86400000);
+}
+
+function dueLabelHTML(dueDateStr) {
+  if (!dueDateStr) return '';
+  const days = daysUntilDue(dueDateStr);
+  const dateStr = formatDate(dueDateStr);
+  if (days < 0) {
+    return `<span class="due-chip due-overdue" title="Overdue">! ${dateStr}</span>`;
+  } else if (days <= 3) {
+    return `<span class="due-chip due-soon" title="Due soon">${dateStr}</span>`;
+  }
+  return `<span class="due-chip">${dateStr}</span>`;
+}
+
+/* ─── Sort helpers ───────────────────────────────────────────────────────────── */
+function sortTodos(list) {
+  return [...list].sort((a, b) => {
+    const po = priorityOrder(a.priority) - priorityOrder(b.priority);
+    if (po !== 0) return po;
+    // Secondary: due date (soonest first, null last)
+    if (!a.due && !b.due) return 0;
+    if (!a.due) return 1;
+    if (!b.due) return -1;
+    return new Date(a.due) - new Date(b.due);
+  });
+}
+
+/* ─── Render ─────────────────────────────────────────────────────────────────── */
+function assigneeChipHTML(assignee) {
+  const labels = { ethan: 'Ethan', dad: 'Dad', unassigned: 'Unassigned' };
+  const classes = { ethan: 'assignee-ethan', dad: 'assignee-dad', unassigned: 'assignee-unassigned' };
+  if (assignee === 'unassigned') return ''; // skip unassigned chip to reduce noise
+  return `<span class="assignee-chip ${classes[assignee] || 'assignee-unassigned'}">${labels[assignee] || assignee}</span>`;
+}
+
+function todoRowHTML(t) {
+  const priorityLabel = { high: 'High', medium: 'Mid', low: 'Low' }[t.priority] || t.priority;
+  return `
+    <div class="todo-row${t.complete ? ' todo-complete' : ''}">
+      <input type="checkbox" class="todo-checkbox" ${t.complete ? 'checked' : ''} onchange="toggleTodo('${t.id}')">
+      <span class="todo-title">${escapeHTML(t.title)}</span>
+      <div class="todo-meta">
+        ${assigneeChipHTML(t.assignee)}
+        <span class="priority-mark ${t.priority}">${priorityLabel}</span>
+        ${dueLabelHTML(t.due)}
+      </div>
+      <button class="todo-delete-btn" onclick="deleteTodo('${t.id}')" title="Delete task">&times;</button>
+    </div>
+  `;
+}
+
+function escapeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderTodos() {
+  const filtered = todos.filter(t => {
+    if (!t.complete && todoFilter !== 'all' && t.assignee !== todoFilter) return false;
+    return true;
+  });
+
+  const active    = sortTodos(filtered.filter(t => !t.complete));
+  const completed = sortTodos(todos.filter(t => t.complete));
+
+  // Active list
+  const activeEl = document.getElementById('todo-active-list');
+  if (active.length === 0) {
+    activeEl.innerHTML = `<div class="todo-empty">No tasks yet. Add one above.</div>`;
+  } else {
+    activeEl.innerHTML = active.map(todoRowHTML).join('');
+  }
+
+  // Completed section
+  const completedSection = document.getElementById('completed-section');
+  const completedEl = document.getElementById('todo-completed-list');
+  const completedLabel = document.getElementById('completed-label');
+
+  if (completed.length === 0) {
+    completedSection.style.display = 'none';
+  } else {
+    completedSection.style.display = '';
+    completedLabel.textContent = `Completed (${completed.length})`;
+    completedEl.innerHTML = completed.map(todoRowHTML).join('');
+  }
+}
+
+/* ─── Init ───────────────────────────────────────────────────────────────────── */
+document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 renderSummary();
 renderToolbar();
 renderCards();
+loadTodos();
+renderTodos();
 </script>
 </body>
 </html>
