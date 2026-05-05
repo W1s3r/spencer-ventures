@@ -990,7 +990,6 @@ main {
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="sync-status" id="sync-status" style="font-size:11px;color:var(--text-faint)"></span>
-          <button class="todo-add-btn" id="sync-btn" onclick="syncTasks()" style="display:none">Sync</button>
         </div>
       </div>
 
@@ -1312,39 +1311,36 @@ function loadTodos() {
 
 function saveTodos() {
   localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-  hasUnsyncedChanges = true;
-  updateSyncStatus();
+  pushToServer();
 }
 
-function updateSyncStatus() {
-  const btn = document.getElementById('sync-btn');
-  const status = document.getElementById('sync-status');
-  if (!btn || !status) return;
-  if (hasUnsyncedChanges && todos.length > 0) {
-    btn.style.display = '';
-    status.textContent = 'Unsaved changes';
-    status.style.color = 'var(--accent)';
-  } else {
-    btn.style.display = 'none';
-    status.textContent = '';
-  }
-}
-
-// Copy tasks JSON to clipboard, then auto-save via sync script
-async function syncTasks() {
-  const json = JSON.stringify(todos, null, 2);
-  try {
-    await navigator.clipboard.writeText(json);
+// Auto-push to local server (which writes tasks.json + git pushes)
+let pushDebounce = null;
+function pushToServer() {
+  clearTimeout(pushDebounce);
+  pushDebounce = setTimeout(async () => {
     const status = document.getElementById('sync-status');
-    status.textContent = 'Copied! Run: sync-tasks';
-    status.style.color = 'var(--stage-launched)';
-    hasUnsyncedChanges = false;
-    document.getElementById('sync-btn').style.display = 'none';
-    setTimeout(() => { status.textContent = ''; }, 5000);
-  } catch(e) {
-    // Fallback: show JSON in a prompt
-    prompt('Copy this JSON, then run sync-tasks in terminal:', json);
-  }
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(todos, null, 2)
+      });
+      if (res.ok) {
+        if (status) {
+          status.textContent = 'Synced';
+          status.style.color = 'var(--stage-launched)';
+          setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+      }
+    } catch(e) {
+      // Server not running — running from file://, fallback to clipboard sync
+      if (status) {
+        status.textContent = 'Local only (start server for sync)';
+        status.style.color = 'var(--text-faint)';
+      }
+    }
+  }, 500); // debounce 500ms to batch rapid changes
 }
 
 function genId() {

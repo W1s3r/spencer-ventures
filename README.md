@@ -7,7 +7,7 @@ Shared business portfolio dashboard for ventures we're working on together.
 Paste this into Claude Code:
 
 ```
-Clone https://github.com/W1s3r/spencer-ventures.git into my home directory, then set up a cron job that auto-pulls from origin/main every hour. Then create a macOS app shortcut called "Spencer Ventures" that opens the dashboard (spencer-ventures/index.html) in Chrome or Safari as a standalone window (no tabs, no URL bar — like a web app). Put the .app on my Desktop so I can drag it wherever I want (Dock, Applications, etc). Also add this alias to my shell config: alias sync-tasks="~/spencer-ventures/sync.sh". After that, open the dashboard.
+Clone https://github.com/W1s3r/spencer-ventures.git into my home directory. Then create a macOS .app shortcut called "Spencer Ventures" on my Desktop. When launched, the app should: cd to ~/spencer-ventures, git pull, kill any existing process on port 3847, start server.py in the background (python3 server.py), wait for it to be ready, then open http://localhost:3847/index.html in Chrome app mode (--app flag, no tabs or URL bar). If Chrome isn't available, fall back to Safari. After creating the .app, open it to verify it works.
 ```
 
 ## View the dashboard
@@ -18,12 +18,7 @@ open ~/spencer-ventures/index.html
 
 ## Syncing shared tasks
 
-Tasks are shared via `tasks.json` in this repo. To sync:
-
-1. Click the **Sync** button in the To-Do tab (copies tasks to clipboard)
-2. Run `sync-tasks` in your terminal (pastes, commits, and pushes)
-
-The other person's auto-pull picks up the changes within an hour (or `git pull` manually).
+Tasks auto-sync when you add, complete, or delete them. The local server writes to `tasks.json` and git-pushes in the background. The other person gets updates on their next launch (the app pulls on open).
 
 ## How it stays updated
 
