@@ -7,7 +7,7 @@ Shared business portfolio dashboard for ventures we're working on together.
 Paste this into Claude Code:
 
 ```
-Clone https://github.com/W1s3r/spencer-ventures.git into my home directory, then set up a cron job that auto-pulls from origin/main every hour. After that, open the dashboard (spencer-ventures/index.html) in my browser.
+Clone https://github.com/W1s3r/spencer-ventures.git into my home directory, then set up a cron job that auto-pulls from origin/main every hour. Then create a macOS app shortcut called "Spencer Ventures" that opens the dashboard (spencer-ventures/index.html) in Chrome or Safari as a standalone window (no tabs, no URL bar — like a web app). Put the .app on my Desktop so I can drag it wherever I want (Dock, Applications, etc). After that, open the dashboard.
 ```
 
 ## View the dashboard
