@@ -603,11 +603,50 @@ main {
 
 .detail-link:hover { background: oklch(62% 0.145 72 / 0.16); }
 
+/* ─── Mobile Layout ──────────────────────────────────────────────────────────── */
+body { overflow-x: hidden; }
+
+/* Stats bar — scrollable on mobile, grid on small screens */
+.summary-strip {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.summary-strip::-webkit-scrollbar { display: none; }
+
+/* By Stage breakdown — stacked list instead of inline text */
+.stat-stage-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-stage-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Filter rows — horizontally scrollable, no wrap */
+.toolbar-group {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.toolbar-group::-webkit-scrollbar { display: none; }
+.toolbar-group .filter-btn { flex-shrink: 0; }
+
+/* Card header padding */
+.card-header { padding: 14px 16px 12px; }
+
 @media (max-width: 900px) {
   header { padding: 24px 20px 0; }
   main   { padding: 16px 20px 48px; }
-  .summary-strip { overflow-x: auto; }
-  .stat-cell { min-width: 100px; }
+  .stat-cell { min-width: 90px; }
   .cards-grid { grid-template-columns: 1fr; }
   h1 { font-size: 23px; }
 }
@@ -615,10 +654,49 @@ main {
 @media (max-width: 600px) {
   header { padding: 20px 16px 0; }
   main   { padding: 14px 16px 40px; }
-  .toolbar { gap: 5px; }
+
+  /* Stack title + date vertically on mobile */
+  .header-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  /* Stats bar — 2-column grid on mobile instead of horizontal scroll */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow-x: unset;
+  }
+  .stat-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 12px 14px;
+  }
+  .stat-cell:nth-child(odd) { border-right: 1px solid var(--border-subtle); }
+  .stat-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+  /* Filter toolbar — scrollable row per group */
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .toolbar-group {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 5px;
+  }
+  .toolbar-sep { display: none; }
   .toolbar-label { display: none; }
-  .sort-select { margin-left: 0; }
+  .sort-select { margin-left: 0; width: 100%; }
+
   h1 { font-size: 20px; }
+  .card-header { padding: 14px 16px 12px; }
+  .card-name { font-size: 15px; }
+  .card-oneliner { font-size: 13px; }
 }
 </style>
 </head>
@@ -877,14 +955,14 @@ function renderSummary() {
   const stale = BUSINESSES.filter(isStale).length;
   const stageCounts = {};
   BUSINESSES.forEach(b => { stageCounts[b.stage] = (stageCounts[b.stage] || 0) + 1; });
-  const stageDisplay = ['launched','pre-launch','research','idea','paused','shelved']
+  const stageItems = ['launched','pre-launch','research','idea','paused','shelved']
     .filter(s => stageCounts[s])
-    .map(s => `<span class="${stageClass(s)}" style="font-weight:600">${stageCounts[s]}</span>&thinsp;${stageLabel(s)}`)
-    .join('<span style="color:var(--text-faint);margin:0 6px">&middot;</span>');
+    .map(s => `<span class="stat-stage-item"><span class="${stageClass(s)}" style="font-weight:600;font-size:13px">${stageCounts[s]}</span><span style="color:var(--text-secondary);font-size:12px">${stageLabel(s)}</span></span>`)
+    .join('');
 
   document.getElementById('summary-strip').innerHTML = `
     <div class="stat-cell"><div class="stat-value">${total}</div><div class="stat-label">Ventures</div></div>
-    <div class="stat-cell" style="flex:2.5"><div class="stat-value stat-stage-breakdown">${stageDisplay}</div><div class="stat-label">By Stage</div></div>
+    <div class="stat-cell" style="flex:2.5"><div class="stat-stage-breakdown">${stageItems}</div><div class="stat-label" style="margin-top:4px">By Stage</div></div>
     <div class="stat-cell"><div class="stat-value" style="color:var(--priority-high)">${high}</div><div class="stat-label">High Priority</div></div>
     <div class="stat-cell stat-stale"><div class="stat-value">${stale}</div><div class="stat-label">Stale (&gt;${STALE_DAYS}d)</div></div>
   `;
