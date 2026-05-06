@@ -3,18 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Ethan Spencer</title>
-<link rel="icon" href="legacy-icon.png">
-<link rel="apple-touch-icon" href="legacy-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Legacy">
+<title>Spencer Ventures</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 /* ─── Tokens ────────────────────────────────────────────────────────────────── */
 :root {
-  /* Warm-light background palette — oklch, amber hue axis ~60deg */
   --bg:            oklch(97% 0.010 70);
   --bg-raised:     oklch(98.5% 0.008 70);
   --bg-card:       oklch(99.5% 0.005 70);
@@ -31,12 +26,10 @@
   --text-muted:     oklch(52% 0.012 62);
   --text-faint:     oklch(62% 0.010 62);
 
-  /* Accent — warm amber gold */
   --accent:        oklch(62% 0.145 72);
   --accent-dim:    oklch(62% 0.145 72 / 0.10);
   --accent-border: oklch(62% 0.145 72 / 0.30);
 
-  /* Stage semantic colors */
   --stage-launched:    oklch(46% 0.15 145);
   --stage-launched-bg: oklch(46% 0.15 145 / 0.10);
   --stage-pre-launch:  oklch(46% 0.14 240);
@@ -54,19 +47,24 @@
   --priority-medium: oklch(52% 0.14 72);
   --priority-low:    oklch(52% 0.010 60);
 
+  --priority-high-bg:   oklch(50% 0.18 25 / 0.10);
+  --priority-medium-bg: oklch(52% 0.14 72 / 0.10);
+  --priority-low-bg:    oklch(52% 0.010 60 / 0.10);
+
   --stale-color:     oklch(52% 0.14 72);
   --stale-bg:        oklch(52% 0.14 72 / 0.08);
   --stale-border:    oklch(52% 0.14 72 / 0.25);
 
-  /* Motion */
+  --overdue-color:   oklch(50% 0.18 25);
+  --overdue-bg:      oklch(50% 0.18 25 / 0.08);
+  --overdue-border:  oklch(50% 0.18 25 / 0.25);
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* ─── Reset ──────────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ─── Base ───────────────────────────────────────────────────────────────────── */
 body {
   background: var(--bg);
   color: var(--text-primary);
@@ -77,7 +75,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Header ─────────────────────────────────────────────────────────────────── */
 header {
   padding: 36px 36px 0;
   max-width: 1440px;
@@ -121,48 +118,45 @@ h1 {
 .tab-bar {
   display: flex;
   gap: 2px;
-  margin-top: 24px;
-  border-bottom: 1px solid var(--border);
+  margin-top: 22px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .tab-btn {
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  padding: 8px 16px;
-  font-family: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 7px 7px 0 0;
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-muted);
+  font-family: inherit;
   cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
   letter-spacing: 0.01em;
-  transition: color 0.15s, border-color 0.15s;
+  position: relative;
+  bottom: -1px;
 }
 
 .tab-btn:hover {
   color: var(--text-secondary);
+  background: oklch(95% 0.010 68 / 0.6);
 }
 
 .tab-btn.active {
   color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* ─── Tab Panels ─────────────────────────────────────────────────────────────── */
-.tab-panel {
-  display: none;
-}
-
-.tab-panel.active {
-  display: block;
+  background: var(--bg);
+  border-color: var(--border-subtle);
+  border-bottom-color: var(--bg);
+  font-weight: 600;
 }
 
 /* ─── Summary Strip ──────────────────────────────────────────────────────────── */
 .summary-strip {
   display: flex;
   gap: 0;
-  margin: 24px 0 0;
+  margin: 18px 0 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -283,14 +277,17 @@ h1 {
 
 .sort-select:hover { border-color: var(--border-focus); }
 
-/* ─── Main ───────────────────────────────────────────────────────────────────── */
+/* ─── Main / Tab Panels ──────────────────────────────────────────────────────── */
 main {
   padding: 20px 36px 56px;
   max-width: 1440px;
   margin: 0 auto;
 }
 
-/* ─── Grid ───────────────────────────────────────────────────────────────────── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─── Dashboard Cards ────────────────────────────────────────────────────────── */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -306,7 +303,6 @@ main {
   font-size: 14px;
 }
 
-/* ─── Card ───────────────────────────────────────────────────────────────────── */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -320,7 +316,6 @@ main {
     background 0.2s var(--ease-out-quart),
     box-shadow 0.25s var(--ease-out-quart),
     transform 0.25s var(--ease-out-expo);
-  /* entrance animation applied via JS */
   opacity: 0;
   transform: translateY(14px);
 }
@@ -343,37 +338,21 @@ main {
   transform: translateY(-2px);
 }
 
-.card.card-visible:hover {
-  transform: translateY(-2px);
-}
+.card.card-visible:hover { transform: translateY(-2px); }
 
-/* High priority: elevated treatment */
-.card.priority-high {
-  border-color: oklch(75% 0.020 60 / 0.85);
-}
+.card.priority-high { border-color: oklch(75% 0.020 60 / 0.85); }
 
 .card.priority-high::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    oklch(68% 0.18 25 / 0.0) 0%,
-    oklch(68% 0.18 25 / 0.6) 30%,
-    oklch(68% 0.18 25 / 0.6) 70%,
-    oklch(68% 0.18 25 / 0.0) 100%
-  );
+  background: linear-gradient(90deg, oklch(68% 0.18 25 / 0.0) 0%, oklch(68% 0.18 25 / 0.6) 30%, oklch(68% 0.18 25 / 0.6) 70%, oklch(68% 0.18 25 / 0.0) 100%);
 }
 
-.card.priority-high .card-name {
-  font-weight: 600;
-}
+.card.priority-high .card-name { font-weight: 600; }
 
-/* Stale treatment */
-.card.stale {
-  border-color: oklch(80% 0.14 75 / 0.22);
-}
+.card.stale { border-color: oklch(80% 0.14 75 / 0.22); }
 
 .card.stale::before {
   content: '';
@@ -386,14 +365,9 @@ main {
   border-radius: 0 9px 0 0;
 }
 
-.card.expanded {
-  border-color: var(--accent-border);
-}
+.card.expanded { border-color: var(--accent-border); }
 
-/* ─── Card Header ────────────────────────────────────────────────────────────── */
-.card-header {
-  padding: 16px 18px 14px;
-}
+.card-header { padding: 16px 18px 14px; }
 
 .card-top-row {
   display: flex;
@@ -402,7 +376,6 @@ main {
   margin-bottom: 8px;
 }
 
-/* Priority indicator — not a dot, a small lozenge with weight */
 .priority-mark {
   font-size: 9px;
   font-weight: 700;
@@ -414,20 +387,9 @@ main {
   font-family: "DM Sans", sans-serif;
 }
 
-.priority-mark.high {
-  color: var(--priority-high);
-  background: oklch(50% 0.18 25 / 0.10);
-}
-
-.priority-mark.medium {
-  color: var(--priority-medium);
-  background: oklch(52% 0.14 72 / 0.10);
-}
-
-.priority-mark.low {
-  color: var(--priority-low);
-  background: oklch(52% 0.010 60 / 0.10);
-}
+.priority-mark.high   { color: var(--priority-high);   background: var(--priority-high-bg); }
+.priority-mark.medium { color: var(--priority-medium); background: var(--priority-medium-bg); }
+.priority-mark.low    { color: var(--priority-low);    background: var(--priority-low-bg); }
 
 .card-name {
   font-size: 14.5px;
@@ -455,12 +417,7 @@ main {
 .stage-paused      { color: var(--stage-paused);      background: var(--stage-paused-bg); }
 .stage-shelved     { color: var(--stage-shelved);     background: var(--stage-shelved-bg); }
 
-.card-entity {
-  font-size: 11px;
-  color: var(--text-faint);
-  margin-bottom: 8px;
-  font-style: italic;
-}
+.card-entity { font-size: 11px; color: var(--text-faint); margin-bottom: 8px; font-style: italic; }
 
 .card-oneliner {
   font-size: 13px;
@@ -470,7 +427,6 @@ main {
   max-width: 65ch;
 }
 
-/* Next action — inline flush, not boxed */
 .card-next-action {
   display: flex;
   align-items: flex-start;
@@ -482,15 +438,8 @@ main {
   border-radius: 6px;
 }
 
-.card-next-action-arrow {
-  color: var(--accent);
-  font-size: 11px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  opacity: 0.8;
-}
+.card-next-action-arrow { color: var(--accent); font-size: 11px; flex-shrink: 0; margin-top: 1px; opacity: 0.8; }
 
-/* ─── Card Footer ────────────────────────────────────────────────────────────── */
 .card-footer {
   padding: 9px 18px;
   border-top: 1px solid var(--border-subtle);
@@ -500,13 +449,7 @@ main {
   gap: 8px;
 }
 
-.card-tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  flex: 1;
-  min-width: 0;
-}
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; min-width: 0; }
 
 .tag {
   font-size: 10px;
@@ -519,18 +462,11 @@ main {
   white-space: nowrap;
 }
 
-.card-updated {
-  font-size: 11px;
-  color: var(--text-faint);
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
+.card-updated { font-size: 11px; color: var(--text-faint); flex-shrink: 0; white-space: nowrap; }
 .card-updated.stale-text { color: var(--stale-color); }
 
-/* ─── Expand chevron ─────────────────────────────────────────────────────────── */
 .expand-btn {
-  display: block;
+  display: flex;
   width: 100%;
   padding: 5px 0;
   background: none;
@@ -540,7 +476,6 @@ main {
   color: var(--text-faint);
   font-size: 11px;
   transition: color 0.15s, background 0.15s;
-  display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
@@ -549,14 +484,8 @@ main {
   letter-spacing: 0.04em;
 }
 
-.expand-btn:hover {
-  background: oklch(93% 0.012 68 / 0.65);
-  color: var(--text-secondary);
-}
-
-.card.expanded .expand-btn {
-  color: var(--accent);
-}
+.expand-btn:hover { background: oklch(93% 0.012 68 / 0.65); color: var(--text-secondary); }
+.card.expanded .expand-btn { color: var(--accent); }
 
 .chevron {
   display: inline-block;
@@ -566,7 +495,6 @@ main {
 
 .card.expanded .chevron { transform: rotate(180deg); }
 
-/* ─── Expanded Detail ────────────────────────────────────────────────────────── */
 .card-detail {
   display: none;
   background: var(--bg-detail);
@@ -585,11 +513,8 @@ main {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.detail-inner {
-  padding: 18px 18px 20px;
-}
+.detail-inner { padding: 18px 18px 20px; }
 
-/* Stale warning — flush, not boxed loud */
 .stale-warning {
   display: flex;
   align-items: center;
@@ -604,11 +529,7 @@ main {
   font-weight: 500;
 }
 
-/* Detail sections */
-.detail-section {
-  margin-bottom: 18px;
-}
-
+.detail-section { margin-bottom: 18px; }
 .detail-section:last-child { margin-bottom: 0; }
 
 .detail-heading {
@@ -620,19 +541,9 @@ main {
   margin-bottom: 8px;
 }
 
-.detail-status {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.65;
-  max-width: 65ch;
-}
+.detail-status { font-size: 13px; color: var(--text-secondary); line-height: 1.65; max-width: 65ch; }
 
-.detail-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+.detail-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
 
 .detail-list li {
   font-size: 13px;
@@ -644,18 +555,8 @@ main {
   max-width: 65ch;
 }
 
-.detail-list li::before {
-  flex-shrink: 0;
-  margin-top: 1px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.detail-list.actions li::before {
-  content: '→';
-  color: var(--accent);
-  opacity: 0.8;
-}
+.detail-list li::before { flex-shrink: 0; margin-top: 1px; font-size: 11px; font-weight: 600; }
+.detail-list.actions li::before { content: '\2192'; color: var(--accent); opacity: 0.8; }
 
 .detail-list.blockers li::before {
   content: '!';
@@ -668,12 +569,7 @@ main {
   margin-top: 2px;
 }
 
-/* ─── Metrics ────────────────────────────────────────────────────────────────── */
-.metrics-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.metrics-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .metric-chip {
   background: var(--bg-chip);
@@ -683,22 +579,9 @@ main {
   min-width: 80px;
 }
 
-.metric-label {
-  font-size: 9.5px;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-weight: 600;
-  margin-bottom: 3px;
-}
+.metric-label { font-size: 9.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-bottom: 3px; }
+.metric-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
 
-.metric-value {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-/* ─── Website link ───────────────────────────────────────────────────────────── */
 .detail-link {
   display: inline-flex;
   align-items: center;
@@ -717,102 +600,115 @@ main {
 .detail-link:hover { background: oklch(62% 0.145 72 / 0.16); }
 
 /* ─── To-Do Tab ──────────────────────────────────────────────────────────────── */
-.todo-panel {
-  padding-top: 24px;
+.todo-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* Add task form */
 .todo-add-form {
-  display: flex;
-  gap: 8px;
-  align-items: center;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
+  padding: 14px 16px;
   box-shadow: 0 1px 4px oklch(40% 0.012 60 / 0.05);
+}
+
+.todo-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   flex-wrap: wrap;
 }
 
-.todo-add-input {
+.todo-input {
   flex: 1;
-  min-width: 180px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 400;
-  color: var(--text-primary);
-  padding: 0;
-  placeholder-color: var(--text-faint);
-}
-
-.todo-add-input::placeholder {
-  color: var(--text-faint);
-}
-
-.todo-add-select {
-  background: var(--bg-chip);
+  min-width: 160px;
+  background: var(--bg);
   border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  padding: 4px 28px 4px 10px;
-  border-radius: 5px;
-  font-size: 12px;
+  border-radius: 6px;
+  color: var(--text-primary);
   font-family: inherit;
-  font-weight: 400;
-  cursor: pointer;
+  font-size: 13px;
+  padding: 6px 10px;
   outline: none;
+  transition: border-color 0.15s;
+}
+
+.todo-input:focus { border-color: var(--border-focus); }
+.todo-input::placeholder { color: var(--text-faint); }
+
+.todo-select {
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 24px 6px 9px;
+  outline: none;
+  cursor: pointer;
   transition: border-color 0.15s;
   appearance: none;
   -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23997755' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-color: var(--bg-chip);
-  flex-shrink: 0;
+  background-position: right 7px center;
 }
 
-.todo-add-select:hover { border-color: var(--border-focus); }
+.todo-select:focus { border-color: var(--border-focus); }
+.todo-select:hover { border-color: var(--border-focus); }
 
-.todo-add-date {
-  background: var(--bg-chip);
+.todo-date-input {
+  background: var(--bg);
   border: 1px solid var(--border-subtle);
+  border-radius: 6px;
   color: var(--text-secondary);
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 12px;
   font-family: inherit;
-  font-weight: 400;
-  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 10px;
   outline: none;
+  cursor: pointer;
   transition: border-color 0.15s;
-  flex-shrink: 0;
+  width: 130px;
 }
 
-.todo-add-date:hover { border-color: var(--border-focus); }
-.todo-add-date::-webkit-calendar-picker-indicator {
-  opacity: 0.5;
-  cursor: pointer;
-}
+.todo-date-input:focus { border-color: var(--border-focus); }
 
 .todo-add-btn {
   background: var(--accent-dim);
   border: 1px solid var(--accent-border);
+  border-radius: 6px;
   color: var(--accent);
-  padding: 5px 14px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 500;
   font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
   cursor: pointer;
-  transition: background 0.15s;
-  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.todo-add-btn:hover { background: oklch(62% 0.145 72 / 0.16); }
+.todo-add-btn:hover { background: oklch(62% 0.145 72 / 0.16); border-color: oklch(62% 0.145 72 / 0.45); }
+
+/* Filter bar */
+.todo-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.todo-filter-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-right: 2px;
+}
 
 /* Task list */
 .todo-list {
@@ -821,21 +717,15 @@ main {
   gap: 6px;
 }
 
-.todo-section-heading {
-  font-size: 9.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--text-faint);
-  margin: 20px 0 10px;
-}
-
-.todo-section-heading:first-child {
-  margin-top: 0;
+.todo-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 0;
+  font-size: 13px;
 }
 
 /* Task row */
-.task-row {
+.todo-row {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -844,167 +734,180 @@ main {
   align-items: center;
   gap: 10px;
   box-shadow: 0 1px 3px oklch(40% 0.012 60 / 0.05);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, background 0.15s, opacity 0.2s;
   position: relative;
 }
 
-.task-row:hover {
-  border-color: var(--border-focus);
-  box-shadow: 0 2px 8px oklch(40% 0.012 60 / 0.08);
+.todo-row:hover { border-color: var(--border-focus); background: var(--bg-card-hover); }
+.todo-row:hover .todo-delete-btn { opacity: 1; }
+
+.todo-row.todo-complete {
+  opacity: 0.55;
 }
 
-.task-row.task-complete {
-  opacity: 0.6;
-}
-
-.task-row.task-complete .task-title {
+.todo-row.todo-complete .todo-title {
   text-decoration: line-through;
   color: var(--text-muted);
 }
 
-/* Checkbox */
-.task-check {
+.todo-checkbox {
   width: 16px;
   height: 16px;
   border: 1.5px solid var(--border);
   border-radius: 4px;
-  background: transparent;
+  background: var(--bg);
   cursor: pointer;
   flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: border-color 0.15s, background 0.15s;
-  appearance: none;
-  -webkit-appearance: none;
   position: relative;
 }
 
-.task-check:hover {
-  border-color: var(--accent);
-}
-
-.task-check:checked {
+.todo-checkbox:checked {
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.task-check:checked::after {
+.todo-checkbox:checked::after {
   content: '';
   position: absolute;
-  width: 8px;
+  width: 9px;
   height: 5px;
   border-left: 1.5px solid white;
   border-bottom: 1.5px solid white;
-  transform: rotate(-45deg) translateY(-1px);
+  transform: translate(-0.5px, -1.5px) rotate(-45deg);
 }
 
-/* Task title */
-.task-title {
+.todo-checkbox:hover:not(:checked) { border-color: var(--border-focus); }
+
+.todo-title {
   flex: 1;
   font-size: 13.5px;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--text-primary);
-  line-height: 1.3;
+  letter-spacing: -0.1px;
   min-width: 0;
 }
 
-/* Task meta */
-.task-meta {
+.todo-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-.task-due {
+/* Assignee chip */
+.assignee-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.assignee-ethan {
+  color: var(--stage-pre-launch);
+  background: var(--stage-pre-launch-bg);
+}
+
+.assignee-dad {
+  color: var(--stage-launched);
+  background: var(--stage-launched-bg);
+}
+
+.assignee-unassigned {
+  color: var(--text-faint);
+  background: oklch(92% 0.010 65 / 0.6);
+}
+
+/* Priority lozenge — reuses .priority-mark */
+/* Due date chip */
+.due-chip {
   font-size: 11px;
   color: var(--text-faint);
   white-space: nowrap;
 }
 
-.task-due.due-overdue {
-  color: var(--stale-color);
-  font-weight: 500;
-}
-
-.task-due.due-soon {
+.due-chip.due-soon {
   color: var(--accent);
   font-weight: 500;
 }
 
-/* Delete button — appears on hover */
-.task-delete {
+.due-chip.due-overdue {
+  color: var(--overdue-color);
+  font-weight: 600;
+}
+
+/* Delete button */
+.todo-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.todo-delete-btn:hover {
+  color: var(--overdue-color);
+  background: var(--overdue-bg);
+}
+
+/* Completed section */
+.completed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 6px;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text-faint);
-  font-size: 14px;
-  padding: 2px 4px;
-  border-radius: 3px;
-  line-height: 1;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
-  flex-shrink: 0;
-}
-
-.task-row:hover .task-delete {
-  opacity: 1;
-}
-
-.task-delete:hover {
-  color: var(--priority-high);
-}
-
-/* Completed section toggle */
-.completed-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-  margin-top: 20px;
-}
-
-.completed-toggle-label {
-  font-size: 9.5px;
-  font-weight: 700;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--text-faint);
+  transition: color 0.15s;
 }
 
-.completed-chevron {
+.completed-toggle:hover { color: var(--text-secondary); }
+
+.completed-toggle .chevron {
   font-size: 9px;
-  color: var(--text-faint);
-  display: inline-block;
   transition: transform 0.2s var(--ease-out-quart);
 }
 
-.completed-toggle.open .completed-chevron {
-  transform: rotate(180deg);
-}
+.completed-toggle.open .chevron { transform: rotate(180deg); }
+
+.completed-section { border-top: 1px solid var(--border-subtle); margin-top: 8px; }
 
 .completed-list {
-  display: none;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.completed-list.open {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 6px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s var(--ease-out-expo);
 }
 
-/* Empty state */
-.todo-empty {
-  text-align: center;
-  color: var(--text-muted);
-  padding: 56px 0;
-  font-size: 13.5px;
-}
+.completed-list.open { max-height: 2000px; }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   header { padding: 24px 20px 0; }
   main   { padding: 16px 20px 48px; }
@@ -1012,6 +915,7 @@ main {
   .stat-cell { min-width: 100px; }
   .cards-grid { grid-template-columns: 1fr; }
   h1 { font-size: 23px; }
+  .todo-add-row { flex-wrap: wrap; }
 }
 
 @media (max-width: 600px) {
@@ -1021,69 +925,88 @@ main {
   .toolbar-label { display: none; }
   .sort-select { margin-left: 0; }
   h1 { font-size: 20px; }
-  .todo-add-form { gap: 6px; }
-  .todo-add-input { min-width: 120px; }
+  .todo-date-input { width: 100%; }
+  .todo-meta { flex-wrap: wrap; }
 }
 </style>
+<link rel="icon" href="legacy-icon.png">
+<link rel="apple-touch-icon" href="legacy-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Legacy">
 </head>
 <body>
 
 <header>
-  <div class="header-eyebrow">Business Portfolio</div>
+  <div class="header-eyebrow">Shared Portfolio</div>
   <div class="header-title-row">
-    <h1>Ethan Spencer</h1>
+    <h1>Spencer Ventures</h1>
     <span class="header-date" id="header-date"></span>
   </div>
 
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <div class="tab-bar" style="border-bottom:none;margin-top:20px">
-      <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
-      <button class="tab-btn" onclick="switchTab('todo')">To-Do</button>
-    </div>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" id="tab-todo" onclick="switchTab('todo')">To-Do</button>
   </div>
-  <div style="border-bottom:1px solid var(--border);margin-top:0"></div>
 </header>
 
 <main>
-  <!-- ── Dashboard Tab ─────────────────────────────────────────────────────── -->
+  <!-- Dashboard Panel -->
   <div class="tab-panel active" id="panel-dashboard">
-    <div class="summary-strip" id="summary-strip">
-      <!-- populated by JS -->
-    </div>
-    <div class="toolbar" id="toolbar">
-      <!-- populated by JS -->
-    </div>
-    <div class="cards-grid" id="cards-grid" style="margin-top: 20px;">
-      <!-- populated by JS -->
+    <div class="summary-strip" id="summary-strip"></div>
+    <div class="toolbar" id="toolbar"></div>
+    <div style="margin-top: 20px;">
+      <div class="cards-grid" id="cards-grid"></div>
     </div>
   </div>
 
-  <!-- ── To-Do Tab ─────────────────────────────────────────────────────────── -->
+  <!-- To-Do Panel -->
   <div class="tab-panel" id="panel-todo">
-    <div class="todo-panel">
+    <div class="todo-layout">
 
       <!-- Add task form -->
-      <form class="todo-add-form" id="todo-add-form" onsubmit="addTask(event)">
-        <input
-          class="todo-add-input"
-          id="todo-title-input"
-          type="text"
-          placeholder="Add a task…"
-          autocomplete="off"
-          required
-        >
-        <select class="todo-add-select" id="todo-priority-select">
-          <option value="high">High</option>
-          <option value="medium" selected>Medium</option>
-          <option value="low">Low</option>
-        </select>
-        <input class="todo-add-date" id="todo-due-input" type="date" title="Due date (optional)">
-        <button class="todo-add-btn" type="submit">Add</button>
-      </form>
+      <div class="todo-add-form">
+        <div class="todo-add-row">
+          <input type="text" class="todo-input" id="todo-title-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTodo()">
+          <select class="todo-select" id="todo-assignee-select">
+            <option value="unassigned">Unassigned</option>
+            <option value="ethan">Ethan</option>
+            <option value="dad">Vaughn</option>
+          </select>
+          <select class="todo-select" id="todo-priority-select">
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="low">Low</option>
+          </select>
+          <input type="date" class="todo-date-input" id="todo-due-input">
+          <button class="todo-add-btn" onclick="addTodo()">+ Add Task</button>
+        </div>
+      </div>
 
-      <!-- Task list -->
-      <div id="todo-list-container">
-        <!-- populated by JS -->
+      <!-- Sync bar -->
+      <div class="todo-filter-bar" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:5px">
+        <span class="todo-filter-label">Assignee</span>
+        <button class="filter-btn active" id="filter-all" onclick="setTodoFilter('all')">All</button>
+        <button class="filter-btn" id="filter-ethan" onclick="setTodoFilter('ethan')">Ethan</button>
+        <button class="filter-btn" id="filter-dad" onclick="setTodoFilter('dad')">Vaughn</button>
+        <button class="filter-btn" id="filter-unassigned" onclick="setTodoFilter('unassigned')">Unassigned</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="sync-status" id="sync-status" style="font-size:11px;color:var(--text-faint)"></span>
+        </div>
+      </div>
+
+      <!-- Active task list -->
+      <div class="todo-list" id="todo-active-list"></div>
+
+      <!-- Completed section -->
+      <div class="completed-section" id="completed-section" style="display:none">
+        <button class="completed-toggle" id="completed-toggle" onclick="toggleCompleted()">
+          <span class="chevron">&#x25BE;</span>
+          <span id="completed-label">Completed</span>
+        </button>
+        <div class="completed-list" id="todo-completed-list"></div>
       </div>
 
     </div>
@@ -1091,169 +1014,33 @@ main {
 </main>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────────
+/* ─── Dashboard Data ─────────────────────────────────────────────────────────── */
 const BUSINESSES = [
-  {
-    name: "SMART TECH",
-    slug: "smart-tech",
-    stage: "pre-launch",
-    priority: "medium",
-    entity: "Smart Home Tech, LLC",
-    website: "",
-    updated: "2026-05-05",
-    tags: ["hardware", "smart-home", "spatial-computing"],
-    oneliner: "Spatial smart home control company — AR interfaces for controlling smart home devices.",
-    status: "VA LLC formed. Patent discovery and intake documents completed. Expo video guide drafted (Apr 30). Core product concept validated through VT capstone project. Preparing for launch phase.",
-    nextActions: [
-      "File provisional patent based on patent-intake-context.md",
-      "Build landing page and product website",
-      "Define MVP product offering (software vs hardware vs service)",
-      "Finalize brand identity and positioning"
-    ],
-    blockers: [
-      "Need to clarify product form factor (app, device, or platform)",
-      "Patent filing pending"
-    ],
-    metrics: { Revenue: "$0", Customers: "0", Costs: "LLC filing fees" }
-  },
   {
     name: "Patent Launch",
     slug: "patent-launch",
     stage: "pre-launch",
     priority: "high",
-    entity: null,
+    entity: "Patent Launch LLC (Virginia)",
     website: "patentlaun.ch",
     updated: "2026-05-05",
     tags: ["saas", "legal-tech", "patents"],
     oneliner: "Affordable AI-powered patent drafting and filing for independent inventors, startups, and small businesses.",
-    status: "Pre-launch documentation complete: service agreements, ToS, privacy policy, pricing, customer profiles, content calendar, outreach templates, and launch announcements (May 2). Domain secured. Business model validated. Ready for website build and soft launch.",
+    status: "Virginia LLC registered. Domain secured (patentlaun.ch). Pre-launch documentation complete: service agreements, ToS, privacy policy, pricing, customer profiles, content calendar, outreach templates, and launch announcements. Business model validated. Ready for website build and soft launch.",
     nextActions: [
-      "Build and deploy landing page and marketing site",
+      "Find patent agent/attorney contractor (search USPTO roster, outreach to 5-10 solo agents in VA/DC)",
+      "Build and deploy landing page (deploy on Vercel)",
+      "Set up professional email (Google Workspace)",
+      "Open business bank account (Mercury/Relay)",
       "Set up Stripe for payments",
-      "Secure contract with USPTO-registered patent agent",
-      "Launch outreach to first 10 target customers",
-      "Execute content calendar and launch announcements"
+      "Get E&O insurance ($50-150/mo)",
+      "Create LinkedIn business page"
     ],
     blockers: [
       "Need contracted patent agent before accepting paying clients",
       "Website not yet built"
     ],
-    metrics: { Revenue: "$0", Customers: "0", Costs: "Domain registration" }
-  },
-  {
-    name: "BitterLitter",
-    slug: "bitter-litter",
-    stage: "research",
-    priority: "high",
-    entity: null,
-    website: "",
-    updated: "2026-05-05",
-    tags: ["cpg", "pet-products", "consumer"],
-    oneliner: "Cat litter pre-infused with quassia extract to deter dogs from eating litter box contents.",
-    status: "Phase 0: Validation. Quassia 4:1 extract ordered (Apr 27), awaiting delivery for physical testing. First Reddit discovery post live in r/dogs (Apr 28). Automated market post rotation active. Comprehensive roadmap, regulatory brief, competitor analysis, and torture test complete.",
-    nextActions: [
-      "Run treat dip test when quassia arrives (0.01%, 0.05%, 0.1%)",
-      "Set up litter box test with Marshmallow once effective concentration found",
-      "Check r/dogs post responses and log to discovery-log.md",
-      "Identify 2-3 Facebook groups for market post rotation",
-      "Book regulatory attorney call ($500-1,500 budget)",
-      "Register bitterlitter.pet domain"
-    ],
-    blockers: [
-      "Waiting on quassia extract delivery to start physical testing",
-      "Phase 0 gate: cat tolerance AND dog deterrence AND >40% purchase intent must all pass"
-    ],
-    metrics: { Revenue: "$0", Customers: "0", Costs: "~$30", Target: "500 units in first 90 days post-launch" }
-  },
-  {
-    name: "LocalWebDev",
-    slug: "local-web-dev",
-    stage: "idea",
-    priority: "medium",
-    entity: null,
-    website: "",
-    updated: "2026-05-05",
-    tags: ["freelance", "web-development", "local-services"],
-    oneliner: "Freelance website redesign service targeting small businesses in Old Town Alexandria, VA.",
-    status: "Concept defined with proposal templates and automation scripts. Revenue-aware tiered pricing model designed. No clients yet.",
-    nextActions: [
-      "Scout 5-10 target businesses in Old Town Alexandria with outdated websites",
-      "Create first spec redesign mockup as portfolio piece",
-      "Build simple portfolio site to showcase work",
-      "Execute first cold outreach"
-    ],
-    blockers: [
-      "No portfolio pieces yet to demonstrate capability",
-      "BusinessScout lead gen tool not built"
-    ],
-    metrics: { Revenue: "$0", Customers: "0", Costs: "$0" }
-  },
-  {
-    name: "BusinessScout",
-    slug: "business-scout",
-    stage: "idea",
-    priority: "low",
-    entity: null,
-    website: "",
-    updated: "2026-05-05",
-    tags: ["tool", "lead-generation", "python"],
-    oneliner: "Local business scouting and lead generation tool for identifying businesses with outdated websites.",
-    status: "Early research phase. One research file exists. No functional tool built yet. Supporting tool for LocalWebDev, not a standalone business.",
-    nextActions: [
-      "Define MVP scope: what data sources to scrape",
-      "Build basic Python scraper to find local businesses and score website quality",
-      "Integrate with LocalWebDev proposal generation workflow"
-    ],
-    blockers: [
-      "LocalWebDev needs to validate demand before investing in tooling",
-      "Scope not yet defined"
-    ],
-    metrics: {}
-  },
-  {
-    name: "Cedar Mountain Farm",
-    slug: "cedar-mountain-farm",
-    stage: "research",
-    priority: "medium",
-    entity: null,
-    website: "",
-    updated: "2026-05-05",
-    tags: ["real-estate", "wedding-venue", "culpeper-va"],
-    oneliner: "Premium wedding venue on a 300-acre property in Culpeper County, VA. Cate Spencer as in-house coordinator.",
-    status: "Analysis complete. Full operating cost model and revenue projections built. DC venue comp analysis done ($20-28K Saturday peak). Capital value proposition documented. 114 property photos cataloged. Year 1 cash flow positive with Cate as coordinator.",
-    nextActions: [
-      "Make acquisition decision: proceed or pass",
-      "If proceeding: secure financing, engage real estate attorney",
-      "Develop detailed business plan with 3-year projections",
-      "Visit property if not already done"
-    ],
-    blockers: [
-      "Major capital commitment (~$3M) — requires financing decision",
-      "Life stage timing (graduating, multiple ventures in flight)"
-    ],
-    metrics: { Revenue: "$0", "Property cost": "~$3M", "Projected rate": "$20-28K/event", "Coordinator savings": "$55-75K/yr" }
-  },
-  {
-    name: "LaunchAI",
-    slug: "launch-ai",
-    stage: "idea",
-    priority: "low",
-    entity: null,
-    website: "",
-    updated: "2026-05-05",
-    tags: ["saas", "ai", "mobile-app"],
-    oneliner: "AI-powered iOS/watchOS app for business launch assistance.",
-    status: "Early exploration. Xcode project scaffolded. Business plan and research docs created. On hold while higher-priority ventures progress.",
-    nextActions: [
-      "Revisit concept and validate against current AI market landscape",
-      "Decide: pursue, pivot, or shelve",
-      "If pursuing: define MVP feature set and target user"
-    ],
-    blockers: [
-      "Low priority relative to SMART TECH, Patent Launch, and BitterLitter",
-      "Concept needs sharpening"
-    ],
-    metrics: { Revenue: "$0", Customers: "0", Costs: "$0" }
+    metrics: { Revenue: "$0", Customers: "0", Entity: "VA LLC" }
   },
   {
     name: "Smart Strap",
@@ -1265,210 +1052,158 @@ const BUSINESSES = [
     updated: "2026-05-05",
     tags: ["hardware", "wearables", "gesture", "emg"],
     oneliner: "Aftermarket gesture-sensing smartwatch band using EMG + IMU sensors in a modular link architecture.",
-    status: "Detailed concept design complete: modular link architecture, 3-tier processing stack, tiered product line (Light $99, Pro $149-179), BOM at ~$55.50/unit. IP strategy drafted. 6-month part-time milestone plan (June-Dec 2026). Blocking on employment agreement check.",
+    status: "Detailed concept design complete: modular link architecture, 3-tier processing stack (iPhone Core ML, Watch Neural Engine, on-strap classifier), tiered product line (Light $99, Pro $149-179), BOM at ~$55.50/unit at 1K qty. IP strategy drafted with design-arounds for Mudra and Meta patents. Critical IP risk: Apple US9553625B2 covers modular electronic band links. 6-month part-time milestone plan created (June-December 2026).",
     nextActions: [
       "Check Naval Reactors employment agreement for IP assignment clauses (BLOCKING)",
       "Order dev hardware: BioAmp EXG Pill x4 + ESP32-S3 + BMI270 (~$200)",
-      "Join Nova Labs (Fairfax) or HacDC makerspace",
+      "Join Nova Labs (Fairfax) or HacDC (Columbia Heights) makerspace",
       "File provisional patent (target: August 2026)",
-      "Apply to PenFed VEP (military founder incubator)",
+      "Apply to PenFed VEP (military founder incubator, free)",
       "Build end-to-end demo: gesture to light on/off (target: September 2026)"
     ],
     blockers: [
       "Employment agreement check must happen before ANY hardware/patent/code work",
-      "Apple patent US9553625B2 on modular band links needs FTO analysis",
+      "Apple patent US9553625B2 on modular band links needs attorney FTO analysis",
       "Need hardware co-founder long-term"
     ],
     metrics: { Revenue: "$0", "Target retail": "$129-149", "BOM cost": "~$55.50/unit", "Prototype budget": "$850-1,500" }
+  },
+  {
+    name: "SMART TECH",
+    slug: "smart-tech",
+    stage: "pre-launch",
+    priority: "medium",
+    entity: "Smart Home Tech, LLC",
+    website: "",
+    updated: "2026-05-05",
+    tags: ["hardware", "smart-home", "spatial-computing"],
+    oneliner: "Spatial smart home control company. AR/spatial interfaces for controlling smart home devices. Parent company for Smart Strap.",
+    status: "VA LLC formed. Patent discovery and intake documents completed. Expo video guide drafted (Apr 30). Core product concept validated through VT capstone project (Vision Pro AR smart home app). Hardware product (Smart Strap) in detailed design phase with 6-month prototype plan.",
+    nextActions: [
+      "File provisional patent based on patent-intake-context.md",
+      "Check Naval Reactors employment agreement for IP clauses (BLOCKING for Smart Strap)",
+      "Build landing page / product website",
+      "Define go-to-market: Smart Strap hardware + spatial software platform",
+      "Begin Smart Strap hardware prototyping (June 2026, pending employment check)"
+    ],
+    blockers: [
+      "Need to clarify product form factor (app, device, or platform)",
+      "Patent filing pending",
+      "Employment agreement check blocks hardware work"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Costs: "LLC filing fees" }
+  },
+  {
+    name: "LaunchAI",
+    slug: "launch-ai",
+    stage: "idea",
+    priority: "low",
+    entity: null,
+    website: "",
+    updated: "2026-05-05",
+    tags: ["saas", "ai", "mobile-app"],
+    oneliner: "AI-powered iOS/watchOS app for business launch assistance.",
+    status: "Early exploration. Xcode project scaffolded (iOS + watchOS targets). Business plan PDF and research documents created. No active development currently.",
+    nextActions: [
+      "Revisit concept and validate against current AI market landscape",
+      "Decide: pursue, pivot, or shelve",
+      "If pursuing: define MVP feature set and target user"
+    ],
+    blockers: [
+      "Low priority relative to Patent Launch and Smart Strap",
+      "Concept needs sharpening"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Costs: "$0" }
   }
 ];
 
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+/* ─── Dashboard State ────────────────────────────────────────────────────────── */
 const STALE_DAYS = 14;
 const TODAY      = new Date();
+TODAY.setHours(0,0,0,0);
 
 const STAGES     = ['all','pre-launch','research','idea','launched','paused','shelved'];
 const PRIORITIES = ['all','high','medium','low'];
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
 let filterStage    = 'all';
 let filterPriority = 'all';
 let sortBy         = 'priority';
 let expandedSlug   = null;
-let activeTab      = 'dashboard';
 
-// ─── UTILS ────────────────────────────────────────────────────────────────────
-function daysSince(dateStr) {
-  return Math.floor((TODAY - new Date(dateStr)) / 86400000);
-}
-
+function daysSince(dateStr) { return Math.floor((TODAY - new Date(dateStr)) / 86400000); }
 function isStale(b) { return daysSince(b.updated) >= STALE_DAYS; }
-
 function stageClass(stage) { return 'stage-' + stage; }
-
 function stageLabel(stage) {
-  return {
-    'pre-launch': 'Pre-Launch',
-    launched: 'Launched',
-    research: 'Research',
-    idea: 'Idea',
-    paused: 'Paused',
-    shelved: 'Shelved'
-  }[stage] || stage;
+  return { 'pre-launch': 'Pre-Launch', launched: 'Launched', research: 'Research', idea: 'Idea', paused: 'Paused', shelved: 'Shelved' }[stage] || stage;
 }
-
-function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric'
-  });
-}
-
+function formatDate(dateStr) { return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 function priorityOrder(p) { return { high: 0, medium: 1, low: 2 }[p] ?? 3; }
+function stageOrder(s) { return { launched: 0, 'pre-launch': 1, research: 2, idea: 3, paused: 4, shelved: 5 }[s] ?? 6; }
 
-function stageOrder(s) {
-  return { launched: 0, 'pre-launch': 1, research: 2, idea: 3, paused: 4, shelved: 5 }[s] ?? 6;
-}
-
-// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
-function switchTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', (i === 0 && tab === 'dashboard') || (i === 1 && tab === 'todo'));
-  });
-  document.querySelectorAll('.tab-panel').forEach(panel => {
-    panel.classList.remove('active');
-  });
-  document.getElementById('panel-' + tab).classList.add('active');
-}
-
-// ─── SUMMARY STRIP ───────────────────────────────────────────────────────────
 function renderSummary() {
   const total = BUSINESSES.length;
   const high  = BUSINESSES.filter(b => b.priority === 'high').length;
   const stale = BUSINESSES.filter(isStale).length;
-
   const stageCounts = {};
   BUSINESSES.forEach(b => { stageCounts[b.stage] = (stageCounts[b.stage] || 0) + 1; });
-
   const stageDisplay = ['launched','pre-launch','research','idea','paused','shelved']
     .filter(s => stageCounts[s])
-    .map(s =>
-      `<span class="${stageClass(s)}" style="font-weight:600">${stageCounts[s]}</span>&thinsp;${stageLabel(s)}`
-    )
+    .map(s => `<span class="${stageClass(s)}" style="font-weight:600">${stageCounts[s]}</span>&thinsp;${stageLabel(s)}`)
     .join('<span style="color:var(--text-faint);margin:0 6px">&middot;</span>');
 
   document.getElementById('summary-strip').innerHTML = `
-    <div class="stat-cell">
-      <div class="stat-value">${total}</div>
-      <div class="stat-label">Total Ventures</div>
-    </div>
-    <div class="stat-cell" style="flex:2.5">
-      <div class="stat-value stat-stage-breakdown">${stageDisplay}</div>
-      <div class="stat-label">By Stage</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-value" style="color:var(--priority-high)">${high}</div>
-      <div class="stat-label">High Priority</div>
-    </div>
-    <div class="stat-cell stat-stale">
-      <div class="stat-value">${stale}</div>
-      <div class="stat-label">Stale (&gt;${STALE_DAYS}d)</div>
-    </div>
+    <div class="stat-cell"><div class="stat-value">${total}</div><div class="stat-label">Ventures</div></div>
+    <div class="stat-cell" style="flex:2.5"><div class="stat-value stat-stage-breakdown">${stageDisplay}</div><div class="stat-label">By Stage</div></div>
+    <div class="stat-cell"><div class="stat-value" style="color:var(--priority-high)">${high}</div><div class="stat-label">High Priority</div></div>
+    <div class="stat-cell stat-stale"><div class="stat-value">${stale}</div><div class="stat-label">Stale (&gt;${STALE_DAYS}d)</div></div>
   `;
 }
 
-// ─── TOOLBAR ──────────────────────────────────────────────────────────────────
 function renderToolbar() {
-  const stageBtns = STAGES.map(s =>
-    `<button class="filter-btn${filterStage === s ? ' active' : ''}" onclick="setStage('${s}')">
-      ${s === 'all' ? 'All' : stageLabel(s)}
-    </button>`
-  ).join('');
-
-  const priorityBtns = PRIORITIES.map(p =>
-    `<button class="filter-btn${filterPriority === p ? ' active' : ''}" onclick="setPriority('${p}')">
-      ${p === 'all' ? 'All' : p.charAt(0).toUpperCase() + p.slice(1)}
-    </button>`
-  ).join('');
+  const stageBtns = STAGES.map(s => `<button class="filter-btn${filterStage === s ? ' active' : ''}" onclick="setStage('${s}')">${s === 'all' ? 'All' : stageLabel(s)}</button>`).join('');
+  const priorityBtns = PRIORITIES.map(p => `<button class="filter-btn${filterPriority === p ? ' active' : ''}" onclick="setPriority('${p}')">${p === 'all' ? 'All' : p.charAt(0).toUpperCase() + p.slice(1)}</button>`).join('');
 
   document.getElementById('toolbar').innerHTML = `
-    <div class="toolbar-group">
-      <span class="toolbar-label">Stage</span>
-      ${stageBtns}
-    </div>
+    <div class="toolbar-group"><span class="toolbar-label">Stage</span>${stageBtns}</div>
     <div class="toolbar-sep"></div>
-    <div class="toolbar-group">
-      <span class="toolbar-label">Priority</span>
-      ${priorityBtns}
-    </div>
+    <div class="toolbar-group"><span class="toolbar-label">Priority</span>${priorityBtns}</div>
     <select class="sort-select" onchange="setSort(this.value)">
       <option value="priority" ${sortBy === 'priority' ? 'selected' : ''}>Priority</option>
-      <option value="stage"    ${sortBy === 'stage'    ? 'selected' : ''}>Stage</option>
-      <option value="name"     ${sortBy === 'name'     ? 'selected' : ''}>Name</option>
-      <option value="updated"  ${sortBy === 'updated'  ? 'selected' : ''}>Last updated</option>
+      <option value="stage" ${sortBy === 'stage' ? 'selected' : ''}>Stage</option>
+      <option value="name" ${sortBy === 'name' ? 'selected' : ''}>Name</option>
+      <option value="updated" ${sortBy === 'updated' ? 'selected' : ''}>Last updated</option>
     </select>
   `;
 }
 
-// ─── FILTER + SORT ────────────────────────────────────────────────────────────
 function getFiltered() {
   let list = [...BUSINESSES];
-  if (filterStage    !== 'all') list = list.filter(b => b.stage    === filterStage);
+  if (filterStage !== 'all') list = list.filter(b => b.stage === filterStage);
   if (filterPriority !== 'all') list = list.filter(b => b.priority === filterPriority);
   list.sort((a, b) => {
     if (sortBy === 'priority') return priorityOrder(a.priority) - priorityOrder(b.priority) || stageOrder(a.stage) - stageOrder(b.stage);
-    if (sortBy === 'stage')    return stageOrder(a.stage)    - stageOrder(b.stage);
-    if (sortBy === 'name')     return a.name.localeCompare(b.name);
-    if (sortBy === 'updated')  return new Date(b.updated) - new Date(a.updated);
+    if (sortBy === 'stage') return stageOrder(a.stage) - stageOrder(b.stage);
+    if (sortBy === 'name') return a.name.localeCompare(b.name);
+    if (sortBy === 'updated') return new Date(b.updated) - new Date(a.updated);
     return 0;
   });
   return list;
 }
 
-// ─── CARD HTML ────────────────────────────────────────────────────────────────
 function cardHTML(b) {
-  const stale    = isStale(b);
-  const age      = daysSince(b.updated);
+  const stale = isStale(b);
+  const age = daysSince(b.updated);
   const expanded = expandedSlug === b.slug;
   const hasMetrics = b.metrics && Object.keys(b.metrics).length > 0;
-
   const priorityLabel = { high: 'High', medium: 'Mid', low: 'Low' }[b.priority] || b.priority;
 
-  const staleWarning = stale ? `
-    <div class="stale-warning">
-      Not updated in ${age} days
-    </div>` : '';
-
-  const metricsHTML = hasMetrics ? `
-    <div class="detail-section">
-      <div class="detail-heading">Metrics</div>
-      <div class="metrics-row">
-        ${Object.entries(b.metrics).map(([k,v]) => `
-          <div class="metric-chip">
-            <div class="metric-label">${k}</div>
-            <div class="metric-value">${v}</div>
-          </div>`).join('')}
-      </div>
-    </div>` : '';
-
-  const websiteHTML = b.website ? `
-    <div class="detail-section">
-      <div class="detail-heading">Website</div>
-      <a class="detail-link" href="https://${b.website}" target="_blank" rel="noopener">
-        ↗ ${b.website}
-      </a>
-    </div>` : '';
-
-  const entityLine = (b.entity && b.entity !== 'none') ? `
-    <div class="card-entity">${b.entity}</div>` : '';
-
-  const expandLabel = expanded ? 'Collapse' : 'Details';
+  const staleWarning = stale ? `<div class="stale-warning">Not updated in ${age} days</div>` : '';
+  const metricsHTML = hasMetrics ? `<div class="detail-section"><div class="detail-heading">Metrics</div><div class="metrics-row">${Object.entries(b.metrics).map(([k,v]) => `<div class="metric-chip"><div class="metric-label">${k}</div><div class="metric-value">${v}</div></div>`).join('')}</div></div>` : '';
+  const websiteHTML = b.website ? `<div class="detail-section"><div class="detail-heading">Website</div><a class="detail-link" href="https://${b.website}" target="_blank" rel="noopener">\u2197 ${b.website}</a></div>` : '';
+  const entityLine = (b.entity && b.entity !== 'none') ? `<div class="card-entity">${b.entity}</div>` : '';
 
   return `
-    <div class="card${stale ? ' stale' : ''}${expanded ? ' expanded' : ''} priority-${b.priority}"
-         id="card-${b.slug}"
-         onclick="toggleCard('${b.slug}')">
-
+    <div class="card${stale ? ' stale' : ''}${expanded ? ' expanded' : ''} priority-${b.priority}" id="card-${b.slug}" onclick="toggleCard('${b.slug}')">
       <div class="card-header">
         <div class="card-top-row">
           <span class="priority-mark ${b.priority}">${priorityLabel}</span>
@@ -1477,289 +1212,299 @@ function cardHTML(b) {
         </div>
         ${entityLine}
         <div class="card-oneliner">${b.oneliner}</div>
-        <div class="card-next-action">
-          <span class="card-next-action-arrow">→</span>
-          <span>${b.nextActions[0]}</span>
-        </div>
+        <div class="card-next-action"><span class="card-next-action-arrow">\u2192</span><span>${b.nextActions[0]}</span></div>
       </div>
-
       <div class="card-footer">
-        <div class="card-tags">
-          ${b.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-        </div>
-        <span class="card-updated${stale ? ' stale-text' : ''}">
-          ${stale ? '!' : ''} ${formatDate(b.updated)}
-        </span>
+        <div class="card-tags">${b.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        <span class="card-updated${stale ? ' stale-text' : ''}">${stale ? '!' : ''} ${formatDate(b.updated)}</span>
       </div>
-
-      <div class="card-detail">
-        <div class="detail-inner">
-          ${staleWarning}
-
-          <div class="detail-section">
-            <div class="detail-heading">Current Status</div>
-            <div class="detail-status">${b.status}</div>
-          </div>
-
-          <div class="detail-section">
-            <div class="detail-heading">Next Actions (${b.nextActions.length})</div>
-            <ul class="detail-list actions">
-              ${b.nextActions.map(a => `<li>${a}</li>`).join('')}
-            </ul>
-          </div>
-
-          ${b.blockers && b.blockers.length ? `
-          <div class="detail-section">
-            <div class="detail-heading">Blockers (${b.blockers.length})</div>
-            <ul class="detail-list blockers">
-              ${b.blockers.map(bl => `<li>${bl}</li>`).join('')}
-            </ul>
-          </div>` : ''}
-
-          ${metricsHTML}
-          ${websiteHTML}
-        </div>
-      </div>
-
-      <button class="expand-btn" onclick="event.stopPropagation(); toggleCard('${b.slug}')">
-        <span class="chevron">▾</span>
-        <span>${expandLabel}</span>
-      </button>
+      <div class="card-detail"><div class="detail-inner">
+        ${staleWarning}
+        <div class="detail-section"><div class="detail-heading">Current Status</div><div class="detail-status">${b.status}</div></div>
+        <div class="detail-section"><div class="detail-heading">Next Actions (${b.nextActions.length})</div><ul class="detail-list actions">${b.nextActions.map(a => `<li>${a}</li>`).join('')}</ul></div>
+        ${b.blockers && b.blockers.length ? `<div class="detail-section"><div class="detail-heading">Blockers (${b.blockers.length})</div><ul class="detail-list blockers">${b.blockers.map(bl => `<li>${bl}</li>`).join('')}</ul></div>` : ''}
+        ${metricsHTML}
+        ${websiteHTML}
+      </div></div>
+      <button class="expand-btn" onclick="event.stopPropagation(); toggleCard('${b.slug}')"><span class="chevron">\u25BE</span><span>${expanded ? 'Collapse' : 'Details'}</span></button>
     </div>
   `;
 }
 
-// ─── RENDER CARDS ─────────────────────────────────────────────────────────────
 function renderCards() {
   const list = getFiltered();
   const grid = document.getElementById('cards-grid');
-
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="no-results">No ventures match the current filters.</div>`;
-    return;
-  }
-
+  if (list.length === 0) { grid.innerHTML = `<div class="no-results">No ventures match the current filters.</div>`; return; }
   grid.innerHTML = list.map(cardHTML).join('');
-
-  // Staggered entrance
-  const cards = grid.querySelectorAll('.card');
-  cards.forEach((card, i) => {
-    setTimeout(() => {
-      card.classList.add('card-visible');
-    }, i * 55);
-  });
+  grid.querySelectorAll('.card').forEach((card, i) => { setTimeout(() => { card.classList.add('card-visible'); }, i * 55); });
 }
 
-// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
 function toggleCard(slug) {
   expandedSlug = expandedSlug === slug ? null : slug;
   renderCards();
-  if (expandedSlug) {
-    const el = document.getElementById('card-' + expandedSlug);
-    if (el) {
-      setTimeout(() => {
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 60);
-    }
-  }
+  if (expandedSlug) { const el = document.getElementById('card-' + expandedSlug); if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60); }
 }
 
-function setStage(s)    { filterStage    = s; renderToolbar(); renderCards(); }
+function setStage(s) { filterStage = s; renderToolbar(); renderCards(); }
 function setPriority(p) { filterPriority = p; renderToolbar(); renderCards(); }
-function setSort(s)     { sortBy         = s; renderCards(); }
+function setSort(s) { sortBy = s; renderCards(); }
 
-// ─── TO-DO: STORAGE ───────────────────────────────────────────────────────────
-const TODO_KEY = 'ethan-dashboard-todos';
+/* ─── Tab Switching ──────────────────────────────────────────────────────────── */
+let activeTab = 'dashboard';
 
-function loadTasks() {
-  try {
-    return JSON.parse(localStorage.getItem(TODO_KEY)) || [];
-  } catch { return []; }
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
 }
 
-function saveTasks(tasks) {
-  localStorage.setItem(TODO_KEY, JSON.stringify(tasks));
-}
-
-// ─── TO-DO: DATE HELPERS ──────────────────────────────────────────────────────
-function parseDueDate(dateStr) {
-  if (!dateStr) return null;
-  // Parse as local date (YYYY-MM-DD)
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
-
-function dueDateClass(dateStr) {
-  if (!dateStr) return '';
-  const due = parseDueDate(dateStr);
-  const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
-  const diffDays = Math.ceil((due - today) / 86400000);
-  if (diffDays < 0) return 'due-overdue';
-  if (diffDays <= 3) return 'due-soon';
-  return '';
-}
-
-function formatDueDate(dateStr) {
-  if (!dateStr) return '';
-  const due = parseDueDate(dateStr);
-  const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
-  const diffDays = Math.ceil((due - today) / 86400000);
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Tomorrow';
-  if (diffDays === -1) return 'Yesterday';
-  if (diffDays < 0) return `${Math.abs(diffDays)}d overdue`;
-  return due.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-// ─── TO-DO: SORT ──────────────────────────────────────────────────────────────
-function sortTasks(tasks) {
-  return [...tasks].sort((a, b) => {
-    // Priority first
-    const pd = priorityOrder(a.priority) - priorityOrder(b.priority);
-    if (pd !== 0) return pd;
-    // Then due date (soonest first, no-date last)
-    if (a.due && b.due) return parseDueDate(a.due) - parseDueDate(b.due);
-    if (a.due && !b.due) return -1;
-    if (!a.due && b.due) return 1;
-    return 0;
-  });
-}
-
-// ─── TO-DO: ADD ───────────────────────────────────────────────────────────────
-function addTask(event) {
-  event.preventDefault();
-  const title    = document.getElementById('todo-title-input').value.trim();
-  const priority = document.getElementById('todo-priority-select').value;
-  const due      = document.getElementById('todo-due-input').value || null;
-
-  if (!title) return;
-
-  const tasks = loadTasks();
-  tasks.push({
-    id: Date.now().toString(),
-    title,
-    priority,
-    due,
-    complete: false,
-    created: new Date().toISOString()
-  });
-  saveTasks(tasks);
-
-  // Reset form
-  document.getElementById('todo-title-input').value = '';
-  document.getElementById('todo-due-input').value = '';
-  document.getElementById('todo-priority-select').value = 'medium';
-
-  renderTodoList();
-  document.getElementById('todo-title-input').focus();
-}
-
-// ─── TO-DO: TOGGLE COMPLETE ───────────────────────────────────────────────────
-function toggleTask(id) {
-  const tasks = loadTasks();
-  const task  = tasks.find(t => t.id === id);
-  if (task) {
-    task.complete = !task.complete;
-    saveTasks(tasks);
-    renderTodoList();
-  }
-}
-
-// ─── TO-DO: DELETE ────────────────────────────────────────────────────────────
-function deleteTask(id) {
-  const tasks = loadTasks().filter(t => t.id !== id);
-  saveTasks(tasks);
-  renderTodoList();
-}
-
-// ─── TO-DO: RENDER ────────────────────────────────────────────────────────────
+/* ─── To-Do State & Storage ──────────────────────────────────────────────────── */
+const TODO_KEY = 'spencer-ventures-todos';
+let todos = [];
+let todoFilter = 'all';
 let completedOpen = false;
+let hasUnsyncedChanges = false;
 
-function taskRowHTML(task) {
-  const priorityLabel = { high: 'High', medium: 'Mid', low: 'Low' }[task.priority] || task.priority;
-  const dueClass  = dueDateClass(task.due);
-  const dueLabel  = formatDueDate(task.due);
-  const checked   = task.complete ? 'checked' : '';
+// Load tasks: merge git-synced tasks.json with localStorage edits
+function loadTodos() {
+  let localTodos = [];
+  try {
+    const raw = localStorage.getItem(TODO_KEY);
+    localTodos = raw ? JSON.parse(raw) : [];
+  } catch(e) { localTodos = []; }
 
+  // Try loading tasks.json (git-synced source of truth)
+  let syncedTodos = [];
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'tasks.json', false); // synchronous
+    xhr.send();
+    if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
+      syncedTodos = JSON.parse(xhr.responseText);
+    }
+  } catch(e) { syncedTodos = []; }
+
+  // Merge: localStorage wins for tasks with matching IDs (has latest edits),
+  // synced adds any tasks from the other person not yet in localStorage
+  if (syncedTodos.length === 0 && localTodos.length > 0) {
+    todos = localTodos;
+  } else if (localTodos.length === 0 && syncedTodos.length > 0) {
+    todos = syncedTodos;
+  } else {
+    const localMap = new Map(localTodos.map(t => [t.id, t]));
+    const syncedMap = new Map(syncedTodos.map(t => [t.id, t]));
+
+    // Start with all local tasks
+    const merged = new Map(localMap);
+
+    // Add any synced tasks not in local (from the other person)
+    for (const [id, task] of syncedMap) {
+      if (!merged.has(id)) {
+        merged.set(id, task);
+      }
+    }
+
+    todos = Array.from(merged.values());
+  }
+
+  saveTodos(); // persist the merged result to localStorage
+  updateSyncStatus();
+}
+
+function saveTodos() {
+  localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+  pushToServer();
+}
+
+// Auto-push to local server (which writes tasks.json + git pushes)
+let pushDebounce = null;
+function pushToServer() {
+  clearTimeout(pushDebounce);
+  pushDebounce = setTimeout(async () => {
+    const status = document.getElementById('sync-status');
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(todos, null, 2)
+      });
+      if (res.ok) {
+        if (status) {
+          status.textContent = 'Synced';
+          status.style.color = 'var(--stage-launched)';
+          setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+      }
+    } catch(e) {
+      // Server not running — running from file://, fallback to clipboard sync
+      if (status) {
+        status.textContent = 'Local only (start server for sync)';
+        status.style.color = 'var(--text-faint)';
+      }
+    }
+  }, 500); // debounce 500ms to batch rapid changes
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+/* ─── To-Do Logic ────────────────────────────────────────────────────────────── */
+function addTodo() {
+  const titleEl   = document.getElementById('todo-title-input');
+  const assigneeEl = document.getElementById('todo-assignee-select');
+  const priorityEl = document.getElementById('todo-priority-select');
+  const dueEl     = document.getElementById('todo-due-input');
+
+  const title = titleEl.value.trim();
+  if (!title) { titleEl.focus(); return; }
+
+  todos.push({
+    id:       genId(),
+    title,
+    assignee: assigneeEl.value,
+    priority: priorityEl.value,
+    due:      dueEl.value || null,
+    complete: false,
+    createdAt: new Date().toISOString()
+  });
+
+  saveTodos();
+  titleEl.value = '';
+  dueEl.value   = '';
+  assigneeEl.value = 'unassigned';
+  priorityEl.value = 'medium';
+  titleEl.focus();
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  saveTodos();
+  renderTodos();
+}
+
+function toggleTodo(id) {
+  const t = todos.find(t => t.id === id);
+  if (t) { t.complete = !t.complete; saveTodos(); renderTodos(); }
+}
+
+function setTodoFilter(f) {
+  todoFilter = f;
+  ['all','ethan','dad','unassigned'].forEach(key => {
+    document.getElementById('filter-' + key).classList.toggle('active', key === f);
+  });
+  renderTodos();
+}
+
+function toggleCompleted() {
+  completedOpen = !completedOpen;
+  const toggle = document.getElementById('completed-toggle');
+  const list   = document.getElementById('todo-completed-list');
+  toggle.classList.toggle('open', completedOpen);
+  list.classList.toggle('open', completedOpen);
+}
+
+/* ─── Due date helpers ───────────────────────────────────────────────────────── */
+function daysUntilDue(dueDateStr) {
+  if (!dueDateStr) return null;
+  const due = new Date(dueDateStr + 'T00:00:00');
+  return Math.floor((due - TODAY) / 86400000);
+}
+
+function dueLabelHTML(dueDateStr) {
+  if (!dueDateStr) return '';
+  const days = daysUntilDue(dueDateStr);
+  const dateStr = formatDate(dueDateStr);
+  if (days < 0) {
+    return `<span class="due-chip due-overdue" title="Overdue">! ${dateStr}</span>`;
+  } else if (days <= 3) {
+    return `<span class="due-chip due-soon" title="Due soon">${dateStr}</span>`;
+  }
+  return `<span class="due-chip">${dateStr}</span>`;
+}
+
+/* ─── Sort helpers ───────────────────────────────────────────────────────────── */
+function sortTodos(list) {
+  return [...list].sort((a, b) => {
+    const po = priorityOrder(a.priority) - priorityOrder(b.priority);
+    if (po !== 0) return po;
+    // Secondary: due date (soonest first, null last)
+    if (!a.due && !b.due) return 0;
+    if (!a.due) return 1;
+    if (!b.due) return -1;
+    return new Date(a.due) - new Date(b.due);
+  });
+}
+
+/* ─── Render ─────────────────────────────────────────────────────────────────── */
+function assigneeChipHTML(assignee) {
+  const labels = { ethan: 'Ethan', dad: 'Vaughn', unassigned: 'Unassigned' };
+  const classes = { ethan: 'assignee-ethan', dad: 'assignee-dad', unassigned: 'assignee-unassigned' };
+  if (assignee === 'unassigned') return ''; // skip unassigned chip to reduce noise
+  return `<span class="assignee-chip ${classes[assignee] || 'assignee-unassigned'}">${labels[assignee] || assignee}</span>`;
+}
+
+function todoRowHTML(t) {
+  const priorityLabel = { high: 'High', medium: 'Mid', low: 'Low' }[t.priority] || t.priority;
   return `
-    <div class="task-row${task.complete ? ' task-complete' : ''}" data-id="${task.id}">
-      <input
-        type="checkbox"
-        class="task-check"
-        ${checked}
-        onchange="toggleTask('${task.id}')"
-        onclick="event.stopPropagation()"
-        aria-label="Mark complete"
-      >
-      <span class="task-title">${escapeHTML(task.title)}</span>
-      <div class="task-meta">
-        <span class="priority-mark ${task.priority}">${priorityLabel}</span>
-        ${dueLabel ? `<span class="task-due ${dueClass}">${dueLabel}</span>` : ''}
+    <div class="todo-row${t.complete ? ' todo-complete' : ''}">
+      <input type="checkbox" class="todo-checkbox" ${t.complete ? 'checked' : ''} onchange="toggleTodo('${t.id}')">
+      <span class="todo-title">${escapeHTML(t.title)}</span>
+      <div class="todo-meta">
+        ${assigneeChipHTML(t.assignee)}
+        <span class="priority-mark ${t.priority}">${priorityLabel}</span>
+        ${dueLabelHTML(t.due)}
       </div>
-      <button
-        class="task-delete"
-        onclick="deleteTask('${task.id}')"
-        aria-label="Delete task"
-        title="Delete"
-      >×</button>
+      <button class="todo-delete-btn" onclick="deleteTodo('${t.id}')" title="Delete task">&times;</button>
     </div>
   `;
 }
 
 function escapeHTML(str) {
-  const div = document.createElement('div');
-  div.appendChild(document.createTextNode(str));
-  return div.innerHTML;
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function renderTodoList() {
-  const all      = loadTasks();
-  const pending  = sortTasks(all.filter(t => !t.complete));
-  const done     = all.filter(t => t.complete);
-  const container = document.getElementById('todo-list-container');
+function renderTodos() {
+  const filtered = todos.filter(t => {
+    if (!t.complete && todoFilter !== 'all' && t.assignee !== todoFilter) return false;
+    return true;
+  });
 
-  if (all.length === 0) {
-    container.innerHTML = `<div class="todo-empty">No tasks yet. Add one above.</div>`;
-    return;
+  const active    = sortTodos(filtered.filter(t => !t.complete));
+  const completed = sortTodos(todos.filter(t => t.complete));
+
+  // Active list
+  const activeEl = document.getElementById('todo-active-list');
+  if (active.length === 0) {
+    activeEl.innerHTML = `<div class="todo-empty">No tasks yet. Add one above.</div>`;
+  } else {
+    activeEl.innerHTML = active.map(todoRowHTML).join('');
   }
 
-  let html = '';
+  // Completed section
+  const completedSection = document.getElementById('completed-section');
+  const completedEl = document.getElementById('todo-completed-list');
+  const completedLabel = document.getElementById('completed-label');
 
-  if (pending.length > 0) {
-    html += pending.map(taskRowHTML).join('');
-  } else if (done.length > 0) {
-    html += `<div class="todo-empty" style="padding:32px 0">All tasks complete.</div>`;
+  if (completed.length === 0) {
+    completedSection.style.display = 'none';
+  } else {
+    completedSection.style.display = '';
+    completedLabel.textContent = `Completed (${completed.length})`;
+    completedEl.innerHTML = completed.map(todoRowHTML).join('');
   }
-
-  if (done.length > 0) {
-    html += `
-      <div class="completed-toggle${completedOpen ? ' open' : ''}" onclick="toggleCompleted()">
-        <span class="completed-chevron">▾</span>
-        <span class="completed-toggle-label">Completed (${done.length})</span>
-      </div>
-      <div class="completed-list${completedOpen ? ' open' : ''}">
-        ${done.map(taskRowHTML).join('')}
-      </div>
-    `;
-  }
-
-  container.innerHTML = html;
 }
 
-function toggleCompleted() {
-  completedOpen = !completedOpen;
-  renderTodoList();
-}
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-document.getElementById('header-date').textContent = TODAY.toLocaleDateString('en-US', {
-  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-});
-
+/* ─── Init ───────────────────────────────────────────────────────────────────── */
+document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 renderSummary();
 renderToolbar();
 renderCards();
-renderTodoList();
+loadTodos();
+renderTodos();
 </script>
 </body>
 </html>
