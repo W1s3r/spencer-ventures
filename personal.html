@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Empire — Ethan Spencer</title>
+<title>Empire</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -34,14 +34,34 @@
   --accent-dim:    oklch(62% 0.145 72 / 0.10);
   --accent-border: oklch(62% 0.145 72 / 0.30);
 
-  --green:         oklch(52% 0.14 145);
-  --green-bg:      oklch(52% 0.14 145 / 0.10);
-  --blue:          oklch(52% 0.14 240);
-  --blue-bg:       oklch(52% 0.14 240 / 0.10);
-  --red:           oklch(50% 0.18 25);
-  --red-bg:        oklch(50% 0.18 25 / 0.10);
-  --orange:        oklch(52% 0.14 72);
-  --orange-bg:     oklch(52% 0.14 72 / 0.10);
+  --stage-launched:    oklch(46% 0.15 145);
+  --stage-launched-bg: oklch(46% 0.15 145 / 0.10);
+  --stage-pre-launch:  oklch(46% 0.14 240);
+  --stage-pre-launch-bg: oklch(46% 0.14 240 / 0.10);
+  --stage-research:    oklch(52% 0.14 72);
+  --stage-research-bg: oklch(52% 0.14 72 / 0.10);
+  --stage-idea:        oklch(48% 0.010 60);
+  --stage-idea-bg:     oklch(48% 0.010 60 / 0.10);
+  --stage-paused:      oklch(52% 0.13 42);
+  --stage-paused-bg:   oklch(52% 0.13 42 / 0.10);
+  --stage-shelved:     oklch(48% 0.14 20);
+  --stage-shelved-bg:  oklch(48% 0.14 20 / 0.10);
+
+  --priority-high:   oklch(50% 0.18 25);
+  --priority-medium: oklch(52% 0.14 72);
+  --priority-low:    oklch(52% 0.010 60);
+
+  --priority-high-bg:   oklch(50% 0.18 25 / 0.10);
+  --priority-medium-bg: oklch(52% 0.14 72 / 0.10);
+  --priority-low-bg:    oklch(52% 0.010 60 / 0.10);
+
+  --stale-color:     oklch(52% 0.14 72);
+  --stale-bg:        oklch(52% 0.14 72 / 0.08);
+  --stale-border:    oklch(52% 0.14 72 / 0.25);
+
+  --overdue-color:   oklch(50% 0.18 25);
+  --overdue-bg:      oklch(50% 0.18 25 / 0.08);
+  --overdue-border:  oklch(50% 0.18 25 / 0.25);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -59,10 +79,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Header ─────────────────────────────────────────────────────────────────── */
 header {
   padding: 36px 36px 0;
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
@@ -81,7 +100,6 @@ header {
   align-items: baseline;
   gap: 20px;
   margin-bottom: 4px;
-  flex-wrap: wrap;
 }
 
 h1 {
@@ -100,48 +118,49 @@ h1 {
   font-weight: 400;
 }
 
-.header-nav {
+/* ─── Tab Bar ────────────────────────────────────────────────────────────────── */
+.tab-bar {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-  margin-bottom: 0;
+  gap: 2px;
+  margin-top: 22px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.nav-link {
-  font-size: 12px;
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
   color: var(--text-muted);
-  text-decoration: none;
-  padding: 4px 10px;
-  border-radius: 5px;
-  border: 1px solid var(--border-subtle);
+  padding: 8px 18px;
+  border-radius: 7px 7px 0 0;
+  font-size: 13px;
   font-weight: 500;
-  transition: border-color 0.15s, color 0.15s;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  letter-spacing: 0.01em;
+  position: relative;
+  bottom: -1px;
 }
 
-.nav-link:hover {
-  border-color: var(--border-focus);
+.tab-btn:hover {
   color: var(--text-secondary);
+  background: oklch(95% 0.010 68 / 0.6);
 }
 
-.nav-link.active {
-  background: var(--accent-dim);
-  border-color: var(--accent-border);
+.tab-btn.active {
   color: var(--accent);
-}
-
-/* ─── Main ───────────────────────────────────────────────────────────────────── */
-main {
-  padding: 24px 36px 56px;
-  max-width: 1200px;
-  margin: 0 auto;
+  background: var(--bg);
+  border-color: var(--border-subtle);
+  border-bottom-color: var(--bg);
+  font-weight: 600;
 }
 
 /* ─── Summary Strip ──────────────────────────────────────────────────────────── */
 .summary-strip {
   display: flex;
   gap: 0;
-  margin-bottom: 28px;
+  margin: 18px 0 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -158,7 +177,7 @@ main {
 .stat-cell:last-child { border-right: none; }
 
 .stat-value {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.5px;
   line-height: 1;
@@ -173,171 +192,216 @@ main {
   font-weight: 500;
 }
 
-/* ─── Section Heading ────────────────────────────────────────────────────────── */
-.section-heading {
-  font-size: 9.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
+.stat-stage-breakdown {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.stat-cell.stat-stale .stat-value { color: var(--stale-color); }
+
+/* ─── Toolbar ────────────────────────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 0 0;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.toolbar-label {
+  font-size: 11px;
   color: var(--text-faint);
-  margin-bottom: 10px;
-  margin-top: 28px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-right: 2px;
+  text-transform: uppercase;
 }
 
-.section-heading:first-child {
-  margin-top: 0;
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 4px 11px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  letter-spacing: 0.01em;
 }
 
-/* ─── Grid layout ────────────────────────────────────────────────────────────── */
-.dashboard-grid {
+.filter-btn:hover {
+  border-color: var(--border-focus);
+  color: var(--text-secondary);
+}
+
+.filter-btn.active {
+  background: var(--accent-dim);
+  border-color: var(--accent-border);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.toolbar-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border-subtle);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+.sort-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  outline: none;
+  margin-left: auto;
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23997755' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 26px;
+}
+
+.sort-select:hover { border-color: var(--border-focus); }
+
+/* ─── Main / Tab Panels ──────────────────────────────────────────────────────── */
+main {
+  padding: 20px 36px 56px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─── Dashboard Cards ────────────────────────────────────────────────────────── */
+.cards-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 10px;
   align-items: start;
 }
 
-.full-width {
+.no-results {
   grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 72px 0;
+  font-size: 14px;
 }
 
-/* ─── Card base ──────────────────────────────────────────────────────────────── */
-.panel {
+.card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 1px 4px oklch(40% 0.012 60 / 0.06);
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 1px 4px oklch(40% 0.012 60 / 0.06), 0 3px 10px oklch(40% 0.012 60 / 0.05);
+  transition:
+    border-color 0.2s var(--ease-out-quart),
+    background 0.2s var(--ease-out-quart),
+    box-shadow 0.25s var(--ease-out-quart),
+    transform 0.25s var(--ease-out-expo);
+  opacity: 0;
+  transform: translateY(14px);
 }
 
-.panel-header {
-  padding: 14px 18px 10px;
-  border-bottom: 1px solid var(--border-subtle);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.card.card-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.5s var(--ease-out-expo),
+    transform 0.5s var(--ease-out-expo),
+    border-color 0.2s var(--ease-out-quart),
+    background 0.2s var(--ease-out-quart),
+    box-shadow 0.25s var(--ease-out-quart);
 }
 
-.panel-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
-}
-
-.panel-count {
-  font-size: 11px;
-  color: var(--text-faint);
-  font-weight: 400;
-}
-
-.panel-body {
-  padding: 14px 18px;
-}
-
-/* ─── Task rows ──────────────────────────────────────────────────────────────── */
-.task-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: 7px;
-  transition: border-color 0.15s;
-}
-
-.task-item:hover {
+.card:hover {
   border-color: var(--border-focus);
+  background: var(--bg-card-hover);
+  box-shadow: 0 6px 24px oklch(40% 0.015 60 / 0.10), 0 2px 6px oklch(40% 0.015 60 / 0.07);
+  transform: translateY(-2px);
 }
 
-.task-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.card.card-visible:hover { transform: translateY(-2px); }
+
+.card.priority-high { border-color: oklch(75% 0.020 60 / 0.85); }
+
+.card.priority-high::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, oklch(68% 0.18 25 / 0.0) 0%, oklch(68% 0.18 25 / 0.6) 30%, oklch(68% 0.18 25 / 0.6) 70%, oklch(68% 0.18 25 / 0.0) 100%);
 }
 
-.task-dot.priority-high    { background: var(--red); }
-.task-dot.priority-medium  { background: var(--orange); }
-.task-dot.priority-low     { background: var(--text-faint); }
-.task-dot.priority-ASAP    { background: var(--red); }
-.task-dot.priority-default { background: var(--text-faint); }
+.card.priority-high .card-name { font-weight: 600; }
 
-.task-text {
-  flex: 1;
-  font-size: 13px;
-  color: var(--text-primary);
-  line-height: 1.3;
+.card.stale { border-color: oklch(80% 0.14 75 / 0.22); }
+
+.card.stale::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 22px 22px 0;
+  border-color: transparent oklch(52% 0.14 72 / 0.40) transparent transparent;
+  border-radius: 0 9px 0 0;
 }
 
-.task-meta {
+.card.expanded { border-color: var(--accent-border); }
+
+.card-header { padding: 16px 18px 14px; }
+
+.card-top-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.task-tag {
-  font-size: 10px;
+.priority-mark {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
+  flex-shrink: 0;
+  font-family: "DM Sans", sans-serif;
+}
+
+.priority-mark.high   { color: var(--priority-high);   background: var(--priority-high-bg); }
+.priority-mark.medium { color: var(--priority-medium); background: var(--priority-medium-bg); }
+.priority-mark.low    { color: var(--priority-low);    background: var(--priority-low-bg); }
+
+.card-name {
+  font-size: 14.5px;
   font-weight: 500;
-}
-
-.tag-home     { background: var(--blue-bg);   color: var(--blue); }
-.tag-school   { background: var(--green-bg);  color: var(--green); }
-.tag-business { background: var(--orange-bg); color: var(--orange); }
-.tag-church   { background: oklch(55% 0.14 310 / 0.12); color: oklch(45% 0.14 310); }
-.tag-health   { background: var(--green-bg);  color: var(--green); }
-.tag-personal { background: var(--bg-chip);   color: var(--text-muted); }
-.tag-default  { background: var(--bg-chip);   color: var(--text-muted); }
-
-.task-due {
-  font-size: 10.5px;
-  color: var(--text-faint);
-  white-space: nowrap;
-}
-
-.task-due.overdue   { color: var(--red);    font-weight: 600; }
-.task-due.due-soon  { color: var(--orange); font-weight: 500; }
-
-/* ─── Ventures quick-view ────────────────────────────────────────────────────── */
-.venture-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.venture-item {
-  padding: 11px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border-subtle);
-  border-radius: 7px;
-  transition: border-color 0.15s;
-}
-
-.venture-item:hover {
-  border-color: var(--border-focus);
-}
-
-.venture-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.venture-name {
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-primary);
+  letter-spacing: -0.15px;
   flex: 1;
+  color: var(--text-primary);
+  line-height: 1.2;
 }
 
 .stage-badge {
@@ -345,399 +409,593 @@ main {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 4px;
   flex-shrink: 0;
 }
 
-.stage-launched   { background: oklch(46% 0.15 145 / 0.12); color: oklch(40% 0.15 145); }
-.stage-pre-launch { background: oklch(46% 0.14 240 / 0.12); color: oklch(40% 0.14 240); }
-.stage-research   { background: oklch(52% 0.14 72 / 0.12);  color: oklch(44% 0.14 72); }
-.stage-idea       { background: oklch(48% 0.010 60 / 0.12); color: oklch(40% 0.010 60); }
-.stage-paused     { background: oklch(52% 0.13 42 / 0.12);  color: oklch(44% 0.13 42); }
-.stage-shelved    { background: oklch(48% 0.14 20 / 0.12);  color: oklch(40% 0.14 20); }
+.stage-launched    { color: var(--stage-launched);    background: var(--stage-launched-bg); }
+.stage-pre-launch  { color: var(--stage-pre-launch);  background: var(--stage-pre-launch-bg); }
+.stage-research    { color: var(--stage-research);    background: var(--stage-research-bg); }
+.stage-idea        { color: var(--stage-idea);        background: var(--stage-idea-bg); }
+.stage-paused      { color: var(--stage-paused);      background: var(--stage-paused-bg); }
+.stage-shelved     { color: var(--stage-shelved);     background: var(--stage-shelved-bg); }
 
-.priority-mark {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 2px 5px;
-  border-radius: 3px;
-  flex-shrink: 0;
+.card-entity { font-size: 11px; color: var(--text-faint); margin-bottom: 8px; font-style: italic; }
+
+.card-oneliner {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  max-width: 65ch;
 }
 
-.priority-mark.high   { background: var(--red-bg);    color: var(--red); }
-.priority-mark.medium { background: var(--orange-bg); color: var(--orange); }
-.priority-mark.low    { background: var(--bg-chip);   color: var(--text-faint); }
-
-.venture-next {
-  font-size: 12px;
-  color: var(--text-secondary);
+.card-next-action {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 8px 10px;
+  background: oklch(93% 0.014 68 / 0.75);
+  border-radius: 6px;
 }
 
-.venture-arrow {
-  color: var(--accent);
-  flex-shrink: 0;
-  font-size: 11px;
-  margin-top: 1px;
-  opacity: 0.75;
-}
+.card-next-action-arrow { color: var(--accent); font-size: 11px; flex-shrink: 0; margin-top: 1px; opacity: 0.8; }
 
-/* ─── Link to portfolio ──────────────────────────────────────────────────────── */
-.portfolio-link-bar {
+.card-footer {
+  padding: 9px 18px;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
-  background: var(--accent-dim);
-  border: 1px solid var(--accent-border);
-  border-radius: 10px;
-  margin-bottom: 28px;
+  gap: 8px;
 }
 
-.portfolio-link-text {
-  font-size: 13px;
-  color: var(--text-primary);
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; min-width: 0; }
+
+.tag {
+  font-size: 10px;
+  color: var(--text-faint);
+  background: oklch(92% 0.012 65 / 0.75);
+  border: 1px solid var(--border-subtle);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.card-updated { font-size: 11px; color: var(--text-faint); flex-shrink: 0; white-space: nowrap; }
+.card-updated.stale-text { color: var(--stale-color); }
+
+.expand-btn {
+  display: flex;
+  width: 100%;
+  padding: 5px 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  cursor: pointer;
+  color: var(--text-faint);
+  font-size: 11px;
+  transition: color 0.15s, background 0.15s;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: inherit;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.expand-btn:hover { background: oklch(93% 0.012 68 / 0.65); color: var(--text-secondary); }
+.card.expanded .expand-btn { color: var(--accent); }
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.22s var(--ease-out-quart);
+  font-size: 10px;
+}
+
+.card.expanded .chevron { transform: rotate(180deg); }
+
+.card-detail {
+  display: none;
+  background: var(--bg-detail);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0;
+  overflow: hidden;
+}
+
+.card.expanded .card-detail {
+  display: block;
+  animation: revealDetail 0.28s var(--ease-out-expo) forwards;
+}
+
+@keyframes revealDetail {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detail-inner { padding: 18px 18px 20px; }
+
+.stale-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--stale-color);
+  background: var(--stale-bg);
+  border: 1px solid var(--stale-border);
+  border-radius: 6px;
+  padding: 7px 11px;
+  margin-bottom: 16px;
   font-weight: 500;
 }
 
-.portfolio-link-sub {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 1px;
+.detail-section { margin-bottom: 18px; }
+.detail-section:last-child { margin-bottom: 0; }
+
+.detail-heading {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+  margin-bottom: 8px;
 }
 
-.portfolio-link-btn {
+.detail-status { font-size: 13px; color: var(--text-secondary); line-height: 1.65; max-width: 65ch; }
+
+.detail-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+
+.detail-list li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  line-height: 1.45;
+  max-width: 65ch;
+}
+
+.detail-list li::before { flex-shrink: 0; margin-top: 1px; font-size: 11px; font-weight: 600; }
+.detail-list.actions li::before { content: '\2192'; color: var(--accent); opacity: 0.8; }
+
+.detail-list.blockers li::before {
+  content: '!';
+  color: var(--stale-color);
+  background: var(--stale-bg);
+  border: 1px solid var(--stale-border);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.metrics-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.metric-chip {
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 7px 12px;
+  min-width: 80px;
+}
+
+.metric-label { font-size: 9.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-bottom: 3px; }
+.metric-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+.detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
   color: var(--accent);
   text-decoration: none;
-  padding: 5px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--accent-border);
+  padding: 5px 11px;
+  background: var(--accent-dim);
   border-radius: 5px;
-  font-weight: 500;
-  white-space: nowrap;
+  border: 1px solid var(--accent-border);
   transition: background 0.15s;
+  font-weight: 500;
 }
 
-.portfolio-link-btn:hover {
-  background: oklch(99% 0.008 70);
-}
+.detail-link:hover { background: oklch(62% 0.145 72 / 0.16); }
 
-/* ─── Empty state ────────────────────────────────────────────────────────────── */
-.empty-state {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 24px 0;
-}
-
-/* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   header { padding: 24px 20px 0; }
-  main   { padding: 20px 20px 48px; }
-  .dashboard-grid { grid-template-columns: 1fr; }
-  .full-width { grid-column: 1; }
-  h1 { font-size: 23px; }
+  main   { padding: 16px 20px 48px; }
   .summary-strip { overflow-x: auto; }
-  .stat-cell { min-width: 90px; }
+  .stat-cell { min-width: 100px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 23px; }
 }
 
 @media (max-width: 600px) {
   header { padding: 20px 16px 0; }
-  main   { padding: 16px 16px 40px; }
+  main   { padding: 14px 16px 40px; }
+  .toolbar { gap: 5px; }
+  .toolbar-label { display: none; }
+  .sort-select { margin-left: 0; }
   h1 { font-size: 20px; }
-  .portfolio-link-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-eyebrow">Empire</div>
+  <div class="header-eyebrow">Full Portfolio</div>
   <div class="header-title-row">
-    <h1>Ethan Spencer</h1>
+    <h1>Empire</h1>
     <span class="header-date" id="header-date"></span>
   </div>
-  <div class="header-nav">
-    <a class="nav-link active" href="personal.html">Empire</a>
-    <a class="nav-link" href="index.html">Business Portfolio</a>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
   </div>
 </header>
 
 <main>
-
-  <!-- Summary strip -->
-  <div class="summary-strip" id="summary-strip" style="margin-top:24px">
-    <!-- populated by JS -->
-  </div>
-
-  <!-- Link to business portfolio -->
-  <div class="portfolio-link-bar">
-    <div>
-      <div class="portfolio-link-text">Spencer Ventures Business Portfolio</div>
-      <div class="portfolio-link-sub">Active ventures — pre-launch, research, and concept stages</div>
+  <!-- Dashboard Panel -->
+  <div class="tab-panel active" id="panel-dashboard">
+    <div class="summary-strip" id="summary-strip"></div>
+    <div class="toolbar" id="toolbar"></div>
+    <div style="margin-top: 20px;">
+      <div class="cards-grid" id="cards-grid"></div>
     </div>
-    <a class="portfolio-link-btn" href="index.html">Open Dashboard →</a>
-  </div>
-
-  <div class="dashboard-grid">
-
-    <!-- Tasks panel -->
-    <div class="panel full-width">
-      <div class="panel-header">
-        <span class="panel-title">High-Priority Tasks</span>
-        <span class="panel-count" id="task-count"></span>
-      </div>
-      <div class="panel-body">
-        <div class="task-list" id="task-list">
-          <!-- populated by JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Top ventures -->
-    <div class="panel full-width">
-      <div class="panel-header">
-        <span class="panel-title">High Priority Ventures</span>
-        <span class="panel-count">2 active</span>
-      </div>
-      <div class="panel-body">
-        <div class="venture-list" id="top-ventures">
-          <!-- populated by JS -->
-        </div>
-      </div>
-    </div>
-
   </div>
 </main>
 
 <script>
-// ─── TASKS DATA (business tasks only) ────────────────────────────────────────
-const TASKS = [
-  {
-    title: "File Provisional Patent",
-    due: "2026-05-15",
-    priority: "high",
-    tags: ["business"],
-    project: "Smart Home Tech"
-  },
-  {
-    title: "Research Patent Agent Marketplaces",
-    due: null,
-    priority: "medium",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Build and Deploy Patent Launch Landing Page",
-    due: null,
-    priority: "high",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Find Patent Agent / Attorney Contractor",
-    due: null,
-    priority: "high",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Set Up Professional Email (Google Workspace)",
-    due: null,
-    priority: "medium",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Open Business Bank Account",
-    due: null,
-    priority: "medium",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Set Up Stripe for Payments",
-    due: null,
-    priority: "medium",
-    tags: ["business"],
-    project: "Patent Launch"
-  },
-  {
-    title: "Order Dev Hardware: BioAmp EXG Pill x4 + ESP32-S3 + BMI270",
-    due: null,
-    priority: "medium",
-    tags: ["business"],
-    project: "Smart Strap"
-  },
-  {
-    title: "Join Makerspace (Nova Labs or HacDC)",
-    due: null,
-    priority: "low",
-    tags: ["business"],
-    project: "Smart Strap"
-  },
-  {
-    title: "BitterLitter: Run Treat Dip Test When Quassia Arrives",
-    due: null,
-    priority: "high",
-    tags: ["business"],
-    project: "BitterLitter"
-  }
-];
-
-// ─── HIGH PRIORITY VENTURES ──────────────────────────────────────────────────
-const TOP_VENTURES = [
+/* ─── Dashboard Data ─────────────────────────────────────────────────────────── */
+const BUSINESSES = [
   {
     name: "Patent Launch",
+    slug: "patent-launch",
     stage: "pre-launch",
     priority: "high",
-    next: "Build and deploy landing page and marketing site"
+    entity: "Patent Launch LLC (Virginia)",
+    website: "patentlaun.ch",
+    updated: "2026-05-05",
+    tags: ["saas", "legal-tech", "patents"],
+    oneliner: "Affordable AI-powered patent drafting and filing for independent inventors, startups, and small businesses.",
+    status: "Virginia LLC registered (April 2026). EIN obtained: 42-2218518 (Form 1065 due 03/15/2027). Domain registered: patentlaun.ch. Comprehensive pre-launch documentation complete: service agreements, ToS, privacy policy, pricing, customer profiles, content calendar, outreach templates, and launch announcements. Business model validated — AI drafts on backend, licensed patent agent files. Ready for website build and soft launch.",
+    nextActions: [
+      "Find patent agent/attorney contractor (search USPTO roster, outreach to 5-10 solo agents in VA/DC)",
+      "Build and deploy landing page (deploy on Vercel)",
+      "Set up professional email (Google Workspace, $7/mo)",
+      "Open business bank account (Mercury/Relay)",
+      "Set up Stripe for payments",
+      "Get E&O insurance ($50-150/mo)",
+      "Create LinkedIn business page",
+      "File SMART provisional patent as first test-run case study"
+    ],
+    blockers: [
+      "Need contracted patent agent before accepting paying clients",
+      "Website not yet built"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Entity: "VA LLC", EIN: "42-2218518" }
   },
   {
     name: "BitterLitter",
+    slug: "bitter-litter",
     stage: "research",
     priority: "high",
-    next: "Run treat dip test when quassia arrives (0.01%, 0.05%, 0.1%)"
+    entity: null,
+    website: "",
+    updated: "2026-05-05",
+    tags: ["cpg", "pet-products", "consumer"],
+    oneliner: "Cat litter pre-infused with quassia extract to deter dogs from eating litter box contents — natural, passive solution for ~22M US households with both dogs and cats.",
+    status: "Phase 0 — Validation. Quassia 4:1 extract ordered (Apr 27), awaiting delivery for physical testing. First Reddit discovery post in r/dogs got 16 responses — all physical barrier solutions, zero chemical/litter deterrent mentions. Market gap validated. Automated market post rotation set up. Comprehensive roadmap, regulatory brief, competitor analysis, and torture test complete. Approval-gated workflow active.",
+    nextActions: [
+      "Run treat dip test when quassia arrives (0.01%, 0.05%, 0.1% concentrations on Dobby)",
+      "Set up litter box test with Marshmallow once effective concentration found",
+      "Check r/dogs post responses and log to discovery-log.md",
+      "Identify 2-3 Facebook groups for market post rotation",
+      "Book regulatory attorney call ($500-1,500 budget)",
+      "Register bitterlitter.pet domain"
+    ],
+    blockers: [
+      "Waiting on quassia extract delivery to start physical testing",
+      "Phase 0 gate: cat tolerance AND dog deterrence AND >40% purchase intent must all pass"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", "Market signal": "16 Reddit responses, gap confirmed", "Target market": "~22M US households" }
+  },
+  {
+    name: "SMART TECH",
+    slug: "smart-tech",
+    stage: "pre-launch",
+    priority: "medium",
+    entity: "Smart Home Tech, LLC",
+    website: "",
+    updated: "2026-05-05",
+    tags: ["hardware", "smart-home", "spatial-computing"],
+    oneliner: "Spatial smart home control company — AR/spatial interfaces for controlling smart home devices. Parent company for Smart Strap.",
+    status: "VA LLC formed (Smart Home Tech, LLC). Patent discovery and intake documents completed. Expo video guide drafted (Apr 30). Core product concept validated through VT capstone project (Vision Pro AR smart home app). Hardware product (Smart Strap — EMG gesture band) in detailed design phase with 6-month prototype plan (June–Dec 2026). Software platform targets Matter/HomeKit integration.",
+    nextActions: [
+      "File provisional patent based on patent-intake-context.md (use Patent Launch as filing service)",
+      "Check Naval Reactors employment agreement for IP clauses (BLOCKING for Smart Strap)",
+      "Build landing page / product website",
+      "Define go-to-market: Smart Strap hardware + spatial software platform",
+      "Begin Smart Strap hardware prototyping (June 2026, pending employment check)"
+    ],
+    blockers: [
+      "Need to clarify product form factor (app, device, or platform)",
+      "Patent filing pending",
+      "Employment agreement check blocks hardware work"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Costs: "LLC filing fees" }
+  },
+  {
+    name: "Smart Strap",
+    slug: "smart-strap",
+    stage: "research",
+    priority: "medium",
+    entity: "Smart Home Tech, LLC",
+    website: "",
+    updated: "2026-05-05",
+    tags: ["hardware", "wearables", "gesture", "emg"],
+    oneliner: "Aftermarket gesture-sensing smartwatch band using EMG + IMU sensors in a modular link architecture. Adds gesture-based smart home control to existing Apple Watch/Galaxy Watch.",
+    status: "Detailed concept design complete: modular link architecture, 3-tier processing stack (iPhone Core ML → Watch Neural Engine → on-strap classifier), tiered product line (Light $99, Pro $149-179), BOM at ~$55.50/unit at 1K qty. IP strategy drafted with design-arounds for Mudra and Meta patents. Critical IP risk: Apple US9553625B2 covers modular electronic band links — needs FTO analysis. 6-month part-time milestone plan created (June–December 2026).",
+    nextActions: [
+      "Check Naval Reactors employment agreement for IP assignment clauses (BLOCKING)",
+      "Order dev hardware: BioAmp EXG Pill x4 + ESP32-S3 + BMI270 (~$200)",
+      "Join Nova Labs (Fairfax) or HacDC (Columbia Heights) makerspace",
+      "File provisional patent (target: August 2026)",
+      "Apply to PenFed VEP (military founder incubator, free)",
+      "Build end-to-end demo: gesture → BLE → iPhone → light on/off (target: September 2026)"
+    ],
+    blockers: [
+      "Employment agreement check must happen before ANY hardware/patent/code work",
+      "Apple patent US9553625B2 on modular band links needs attorney FTO analysis",
+      "Need hardware co-founder long-term (decision gate: Month 5)"
+    ],
+    metrics: { Revenue: "$0", "Target retail": "$129-149", "BOM cost": "~$55.50/unit", "Prototype budget": "$850-1,500" }
+  },
+  {
+    name: "Cedar Mountain Farm",
+    slug: "cedar-mountain-farm",
+    stage: "research",
+    priority: "medium",
+    entity: null,
+    website: "",
+    updated: "2026-05-05",
+    tags: ["real-estate", "wedding-venue", "culpeper-va"],
+    oneliner: "Premium wedding venue on 300-acre property in Culpeper County, VA (~1.25 hrs from DC). Cate as in-house coordinator. MLS #VACU2010668, listed ~$3M.",
+    status: "Analysis complete. Full operating cost model and revenue projections built. DC venue comp analysis done (venues charge $20-28K for Saturday peak slots). Capital value proposition documented. 114 property photos cataloged. Property priced at bottom of market with significant upside. Year 1 cash flow positive with Cate as coordinator (saves $55-75K/yr vs hiring).",
+    nextActions: [
+      "Make acquisition decision: proceed or pass",
+      "If proceeding: secure financing, engage real estate attorney",
+      "Develop detailed business plan with 3-year projections",
+      "Visit property if not already done"
+    ],
+    blockers: [
+      "Major capital commitment (~$3M) — requires financing decision",
+      "Life stage timing (Ethan graduating, multiple ventures in flight)"
+    ],
+    metrics: { Revenue: "$0", "Property cost": "~$3M", "Peak rate": "$20-28K/event", "Coordinator savings": "$55-75K/yr" }
+  },
+  {
+    name: "LocalWebDev",
+    slug: "local-web-dev",
+    stage: "idea",
+    priority: "medium",
+    entity: null,
+    website: "",
+    updated: "2026-05-05",
+    tags: ["freelance", "web-development", "local-services"],
+    oneliner: "Freelance website redesign service targeting small-to-mid businesses in Old Town Alexandria, VA with compelling spec redesigns as sales hooks.",
+    status: "Concept defined with CLAUDE.md, proposal templates, and automation scripts (generate_proposal.py, new_client.sh, screenshot.py). Implementation plans drafted (Phase A pitch & design spec, Mar 29). Revenue-aware tiered pricing model designed. No clients yet — needs first outreach push.",
+    nextActions: [
+      "Scout 5-10 target businesses in Old Town Alexandria with outdated websites",
+      "Create first spec redesign mockup as portfolio piece / sales hook",
+      "Build simple portfolio site to showcase work",
+      "Execute first cold outreach (PDF mockup + live demo approach)"
+    ],
+    blockers: [
+      "No portfolio pieces yet to demonstrate capability",
+      "BusinessScout lead gen tool not built"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Costs: "$0" }
+  },
+  {
+    name: "LaunchAI",
+    slug: "launch-ai",
+    stage: "idea",
+    priority: "low",
+    entity: null,
+    website: "",
+    updated: "2026-05-05",
+    tags: ["saas", "ai", "mobile-app"],
+    oneliner: "AI-powered iOS/watchOS app for business launch assistance.",
+    status: "Early exploration. Xcode project scaffolded (iOS + watchOS targets via XcodeGen). Business plan PDF and research documents created. No active development — on hold while higher-priority ventures progress.",
+    nextActions: [
+      "Revisit concept and validate against current AI market landscape",
+      "Decide: pursue, pivot, or shelve",
+      "If pursuing: define MVP feature set and target user"
+    ],
+    blockers: [
+      "Low priority relative to Patent Launch, SMART TECH, and BitterLitter",
+      "Concept needs sharpening"
+    ],
+    metrics: { Revenue: "$0", Customers: "0", Costs: "$0" }
+  },
+  {
+    name: "Biodegradable Floral Foam",
+    slug: "bio-floral-foam",
+    stage: "idea",
+    priority: "low",
+    entity: null,
+    website: "",
+    updated: "2026-05-04",
+    tags: ["cpg", "sustainability", "physical-product", "floral-industry"],
+    oneliner: "Fully biodegradable drop-in replacement for petroleum-based Oasis floral foam, targeting the $6B+ global floral foam market as environmental regulations tighten.",
+    status: "Torture test complete: CONDITIONAL PASS. Verdict: Do not try to invent new material — the mycelium path is likely a dead end (Ecovative tried and abandoned it). Best path: license or white-label existing biodegradable foam tech (Sideau/Phoam), brand for underserved US market. Target church/wedding niche first. $25-40K startup budget, 6-12 months to first revenue. Market gap exists in US distribution; EU competitors have head start.",
+    nextActions: [
+      "Make go/no-go decision on pursuing this venture",
+      "If pursuing: contact Sideau (Agra-Wool) about US distribution/white-label agreement",
+      "Research Sustainable Floristry Network for market entry",
+      "Target church floral programs — high-volume, values-aligned buyers",
+      "Attend Society of American Florists (SAF) annual conference"
+    ],
+    blockers: [
+      "Bandwidth — lower priority than active ventures",
+      "CONDITIONAL: Do not pursue own R&D/manufacturing (money pit)"
+    ],
+    metrics: { Verdict: "Conditional Pass", "Startup cost": "$25-40K", "Year 1 rev": "$50-150K", "Year 3 rev": "$500K-2M" }
   }
 ];
 
-// ─── UTILS ────────────────────────────────────────────────────────────────────
-const TODAY = new Date();
+/* ─── Dashboard State ─────────────────────────────────────────────────────────── */
+const STALE_DAYS = 14;
+const TODAY      = new Date();
+TODAY.setHours(0,0,0,0);
 
-function parseDue(str) {
-  if (!str) return null;
-  const [y, m, d] = str.split('-').map(Number);
-  return new Date(y, m - 1, d);
+const STAGES     = ['all','pre-launch','research','idea','launched','paused','shelved'];
+const PRIORITIES = ['all','high','medium','low'];
+
+let filterStage    = 'all';
+let filterPriority = 'all';
+let sortBy         = 'priority';
+let expandedSlug   = null;
+
+function daysSince(dateStr) { return Math.floor((TODAY - new Date(dateStr)) / 86400000); }
+function isStale(b) { return daysSince(b.updated) >= STALE_DAYS; }
+function stageClass(stage) { return 'stage-' + stage; }
+function stageLabel(stage) {
+  return { 'pre-launch': 'Pre-Launch', launched: 'Launched', research: 'Research', idea: 'Idea', paused: 'Paused', shelved: 'Shelved' }[stage] || stage;
 }
+function formatDate(dateStr) { return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function priorityOrder(p) { return { high: 0, medium: 1, low: 2 }[p] ?? 3; }
+function stageOrder(s) { return { launched: 0, 'pre-launch': 1, research: 2, idea: 3, paused: 4, shelved: 5 }[s] ?? 6; }
 
-function dueDiff(str) {
-  if (!str) return null;
-  const due = parseDue(str);
-  const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
-  return Math.ceil((due - today) / 86400000);
-}
-
-function formatDue(str) {
-  if (!str) return '';
-  const diff = dueDiff(str);
-  if (diff === 0) return 'Today';
-  if (diff === 1) return 'Tomorrow';
-  if (diff === -1) return 'Yesterday';
-  if (diff < 0) return Math.abs(diff) + 'd overdue';
-  return parseDue(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-function dueClass(str) {
-  if (!str) return '';
-  const diff = dueDiff(str);
-  if (diff < 0) return 'overdue';
-  if (diff <= 3) return 'due-soon';
-  return '';
-}
-
-function priorityOrder(p) {
-  return { ASAP: 0, high: 1, medium: 2, low: 3 }[p] ?? 4;
-}
-
-// ─── SUMMARY STRIP ───────────────────────────────────────────────────────────
 function renderSummary() {
-  const overdue  = TASKS.filter(t => t.due && dueDiff(t.due) < 0).length;
-  const due_soon = TASKS.filter(t => t.due && dueDiff(t.due) >= 0 && dueDiff(t.due) <= 7).length;
-  const high     = TASKS.filter(t => t.priority === 'high' || t.priority === 'ASAP').length;
+  const total = BUSINESSES.length;
+  const high  = BUSINESSES.filter(b => b.priority === 'high').length;
+  const stale = BUSINESSES.filter(isStale).length;
+  const stageCounts = {};
+  BUSINESSES.forEach(b => { stageCounts[b.stage] = (stageCounts[b.stage] || 0) + 1; });
+  const stageDisplay = ['launched','pre-launch','research','idea','paused','shelved']
+    .filter(s => stageCounts[s])
+    .map(s => `<span class="${stageClass(s)}" style="font-weight:600">${stageCounts[s]}</span>&thinsp;${stageLabel(s)}`)
+    .join('<span style="color:var(--text-faint);margin:0 6px">&middot;</span>');
 
   document.getElementById('summary-strip').innerHTML = `
-    <div class="stat-cell">
-      <div class="stat-value">${TASKS.length}</div>
-      <div class="stat-label">Business Tasks</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-value" style="color:var(--red)">${overdue}</div>
-      <div class="stat-label">Overdue</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-value" style="color:var(--orange)">${due_soon}</div>
-      <div class="stat-label">Due This Week</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-value" style="color:var(--red)">${high}</div>
-      <div class="stat-label">High Priority</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-value">4</div>
-      <div class="stat-label">Active Ventures</div>
+    <div class="stat-cell"><div class="stat-value">${total}</div><div class="stat-label">Ventures</div></div>
+    <div class="stat-cell" style="flex:2.5"><div class="stat-value stat-stage-breakdown">${stageDisplay}</div><div class="stat-label">By Stage</div></div>
+    <div class="stat-cell"><div class="stat-value" style="color:var(--priority-high)">${high}</div><div class="stat-label">High Priority</div></div>
+    <div class="stat-cell stat-stale"><div class="stat-value">${stale}</div><div class="stat-label">Stale (&gt;${STALE_DAYS}d)</div></div>
+  `;
+}
+
+function renderToolbar() {
+  const stageBtns = STAGES.map(s => `<button class="filter-btn${filterStage === s ? ' active' : ''}" onclick="setStage('${s}')">${s === 'all' ? 'All' : stageLabel(s)}</button>`).join('');
+  const priorityBtns = PRIORITIES.map(p => `<button class="filter-btn${filterPriority === p ? ' active' : ''}" onclick="setPriority('${p}')">${p === 'all' ? 'All' : p.charAt(0).toUpperCase() + p.slice(1)}</button>`).join('');
+
+  document.getElementById('toolbar').innerHTML = `
+    <div class="toolbar-group"><span class="toolbar-label">Stage</span>${stageBtns}</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-group"><span class="toolbar-label">Priority</span>${priorityBtns}</div>
+    <select class="sort-select" onchange="setSort(this.value)">
+      <option value="priority" ${sortBy === 'priority' ? 'selected' : ''}>Priority</option>
+      <option value="stage" ${sortBy === 'stage' ? 'selected' : ''}>Stage</option>
+      <option value="name" ${sortBy === 'name' ? 'selected' : ''}>Name</option>
+      <option value="updated" ${sortBy === 'updated' ? 'selected' : ''}>Last updated</option>
+    </select>
+  `;
+}
+
+function getFiltered() {
+  let list = [...BUSINESSES];
+  if (filterStage !== 'all') list = list.filter(b => b.stage === filterStage);
+  if (filterPriority !== 'all') list = list.filter(b => b.priority === filterPriority);
+  list.sort((a, b) => {
+    if (sortBy === 'priority') return priorityOrder(a.priority) - priorityOrder(b.priority) || stageOrder(a.stage) - stageOrder(b.stage);
+    if (sortBy === 'stage') return stageOrder(a.stage) - stageOrder(b.stage);
+    if (sortBy === 'name') return a.name.localeCompare(b.name);
+    if (sortBy === 'updated') return new Date(b.updated) - new Date(a.updated);
+    return 0;
+  });
+  return list;
+}
+
+function cardHTML(b) {
+  const stale = isStale(b);
+  const age = daysSince(b.updated);
+  const expanded = expandedSlug === b.slug;
+  const hasMetrics = b.metrics && Object.keys(b.metrics).length > 0;
+  const priorityLabel = { high: 'High', medium: 'Mid', low: 'Low' }[b.priority] || b.priority;
+
+  const staleWarning = stale ? `<div class="stale-warning">Not updated in ${age} days</div>` : '';
+  const metricsHTML = hasMetrics ? `<div class="detail-section"><div class="detail-heading">Metrics</div><div class="metrics-row">${Object.entries(b.metrics).map(([k,v]) => `<div class="metric-chip"><div class="metric-label">${k}</div><div class="metric-value">${v}</div></div>`).join('')}</div></div>` : '';
+  const websiteHTML = b.website ? `<div class="detail-section"><div class="detail-heading">Website</div><a class="detail-link" href="https://${b.website}" target="_blank" rel="noopener">\u2197 ${b.website}</a></div>` : '';
+  const entityLine = (b.entity && b.entity !== 'none') ? `<div class="card-entity">${b.entity}</div>` : '';
+
+  return `
+    <div class="card${stale ? ' stale' : ''}${expanded ? ' expanded' : ''} priority-${b.priority}" id="card-${b.slug}" onclick="toggleCard('${b.slug}')">
+      <div class="card-header">
+        <div class="card-top-row">
+          <span class="priority-mark ${b.priority}">${priorityLabel}</span>
+          <span class="card-name">${b.name}</span>
+          <span class="stage-badge ${stageClass(b.stage)}">${stageLabel(b.stage)}</span>
+        </div>
+        ${entityLine}
+        <div class="card-oneliner">${b.oneliner}</div>
+        <div class="card-next-action"><span class="card-next-action-arrow">\u2192</span><span>${b.nextActions[0]}</span></div>
+      </div>
+      <div class="card-footer">
+        <div class="card-tags">${b.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        <span class="card-updated${stale ? ' stale-text' : ''}">${stale ? '!' : ''} ${formatDate(b.updated)}</span>
+      </div>
+      <div class="card-detail"><div class="detail-inner">
+        ${staleWarning}
+        <div class="detail-section"><div class="detail-heading">Current Status</div><div class="detail-status">${b.status}</div></div>
+        <div class="detail-section"><div class="detail-heading">Next Actions (${b.nextActions.length})</div><ul class="detail-list actions">${b.nextActions.map(a => `<li>${a}</li>`).join('')}</ul></div>
+        ${b.blockers && b.blockers.length ? `<div class="detail-section"><div class="detail-heading">Blockers (${b.blockers.length})</div><ul class="detail-list blockers">${b.blockers.map(bl => `<li>${bl}</li>`).join('')}</ul></div>` : ''}
+        ${metricsHTML}
+        ${websiteHTML}
+      </div></div>
+      <button class="expand-btn" onclick="event.stopPropagation(); toggleCard('${b.slug}')"><span class="chevron">\u25BE</span><span>${expanded ? 'Collapse' : 'Details'}</span></button>
     </div>
   `;
 }
 
-// ─── TASK LIST ────────────────────────────────────────────────────────────────
-function renderTasks() {
-  const sorted = [...TASKS].sort((a, b) => {
-    const pd = priorityOrder(a.priority) - priorityOrder(b.priority);
-    if (pd !== 0) return pd;
-    const da = a.due ? dueDiff(a.due) : 9999;
-    const db = b.due ? dueDiff(b.due) : 9999;
-    return da - db;
-  });
-
-  document.getElementById('task-count').textContent = sorted.length + ' tasks';
-
-  if (sorted.length === 0) {
-    document.getElementById('task-list').innerHTML = '<div class="empty-state">All clear. No pending tasks.</div>';
-    return;
-  }
-
-  document.getElementById('task-list').innerHTML = sorted.map(t => {
-    const tagHTML = t.tags.slice(0, 2).map(tag => {
-      const cls = ['home','school','business','church','health','personal'].includes(tag) ? 'tag-' + tag : 'tag-default';
-      return `<span class="task-tag ${cls}">${tag}</span>`;
-    }).join('');
-    const dueLabel = formatDue(t.due);
-    const dueCls   = dueClass(t.due);
-    const dotCls   = ['ASAP','high','medium','low'].includes(t.priority) ? 'priority-' + t.priority : 'priority-default';
-    return `
-      <div class="task-item">
-        <span class="task-dot ${dotCls}"></span>
-        <span class="task-text">${t.title}${t.project ? ' <span style="font-size:11px;color:var(--text-faint);">· ' + t.project + '</span>' : ''}</span>
-        <div class="task-meta">
-          ${tagHTML}
-          ${dueLabel ? `<span class="task-due ${dueCls}">${dueLabel}</span>` : ''}
-        </div>
-      </div>
-    `;
-  }).join('');
+function renderCards() {
+  const list = getFiltered();
+  const grid = document.getElementById('cards-grid');
+  if (list.length === 0) { grid.innerHTML = `<div class="no-results">No ventures match the current filters.</div>`; return; }
+  grid.innerHTML = list.map(cardHTML).join('');
+  grid.querySelectorAll('.card').forEach((card, i) => { setTimeout(() => { card.classList.add('card-visible'); }, i * 55); });
 }
 
-// ─── TOP VENTURES ────────────────────────────────────────────────────────────
-function renderVentures() {
-  document.getElementById('top-ventures').innerHTML = TOP_VENTURES.map(v => `
-    <div class="venture-item">
-      <div class="venture-top">
-        <span class="priority-mark ${v.priority}">${v.priority === 'high' ? 'High' : v.priority}</span>
-        <span class="venture-name">${v.name}</span>
-        <span class="stage-badge stage-${v.stage}">${v.stage.replace('-', '\u2011')}</span>
-      </div>
-      <div class="venture-next">
-        <span class="venture-arrow">→</span>
-        <span>${v.next}</span>
-      </div>
-    </div>
-  `).join('');
+function toggleCard(slug) {
+  expandedSlug = expandedSlug === slug ? null : slug;
+  renderCards();
+  if (expandedSlug) { const el = document.getElementById('card-' + expandedSlug); if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60); }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-document.getElementById('header-date').textContent = TODAY.toLocaleDateString('en-US', {
-  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-});
+function setStage(s) { filterStage = s; renderToolbar(); renderCards(); }
+function setPriority(p) { filterPriority = p; renderToolbar(); renderCards(); }
+function setSort(s) { sortBy = s; renderCards(); }
 
+/* ─── Tab Switching ──────────────────────────────────────────────────────────── */
+let activeTab = 'dashboard';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+/* ─── Init ───────────────────────────────────────────────────────────────────── */
+document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 renderSummary();
-renderTasks();
-renderVentures();
+renderToolbar();
+renderCards();
 </script>
 </body>
 </html>
