@@ -1451,24 +1451,36 @@ let _ghFileSha = null;
 /* ─── Load tasks from GitHub ─────────────────────────────────────────────────── */
 async function loadTodos() {
   setSyncStatus('Loading…', 'var(--text-faint)');
+  const token = getToken();
   try {
-    // Bust cache with timestamp so both users always get latest
-    const res = await fetch(GH_RAW + '?t=' + Date.now());
-    if (res.ok) {
-      const data = await res.json();
-      todos = Array.isArray(data.tasks) ? data.tasks : (Array.isArray(data) ? data : []);
+    if (token) {
+      // Use GitHub API (no CDN cache) when token is available — also gets SHA
+      const res = await fetch(GH_API, {
+        headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' }
+      });
+      if (res.ok) {
+        const meta = await res.json();
+        _ghFileSha = meta.sha || null;
+        const decoded = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+        todos = Array.isArray(decoded.tasks) ? decoded.tasks : [];
+      } else {
+        todos = [];
+      }
     } else {
-      todos = [];
+      // No token — fall back to raw URL (may be cached, read-only)
+      const res = await fetch(GH_RAW + '?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        todos = Array.isArray(data.tasks) ? data.tasks : [];
+      } else {
+        todos = [];
+      }
     }
   } catch(e) {
     todos = [];
   }
-  setSyncStatus('', '');
+  setSyncStatus(token ? '' : '⚠ No token — read-only', token ? '' : 'var(--text-faint)');
   renderTodos();
-
-  // Also fetch via API to get the SHA (needed for later commits)
-  const token = getToken();
-  if (token) _fetchGhSha(token);
 }
 
 async function _fetchGhSha(token) {
