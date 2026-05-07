@@ -1,14 +1,4 @@
 {
-  "tasks": [
-    {
-      "id": "mouxp9w24etdp",
-      "title": "Task 1",
-      "assignee": "unassigned",
-      "priority": "medium",
-      "due": null,
-      "complete": false,
-      "createdAt": "2026-05-07T03:36:18.002Z"
-    }
-  ],
+  "tasks": [],
   "lastUpdated": "2026-05-07"
 }
