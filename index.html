@@ -1072,6 +1072,11 @@ body { overflow-x: hidden; }
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="sync-status" id="sync-status" style="font-size:11px;color:var(--text-faint)"></span>
+          <button onclick="showTokenModal(()=>{setSyncStatus('Token saved',`var(--stage-launched)`,2000);setTimeout(_pushToGitHub,300)})"
+            style="background:transparent;border:1px solid var(--border-subtle);border-radius:5px;
+              color:var(--text-faint);font-family:inherit;font-size:11px;font-weight:500;
+              padding:3px 9px;cursor:pointer;white-space:nowrap;"
+            title="Set up or update GitHub sync token">⚙ Sync</button>
         </div>
       </div>
 
@@ -1338,91 +1343,220 @@ function switchTab(tab) {
   document.getElementById('panel-' + tab).classList.add('active');
 }
 
+/* ─── GitHub API Config ──────────────────────────────────────────────────────── */
+const GH_REPO    = 'W1s3r/spencer-ventures';
+const GH_FILE    = 'tasks.json';
+const GH_API     = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+const GH_RAW     = `https://raw.githubusercontent.com/${GH_REPO}/main/${GH_FILE}`;
+const TOKEN_KEY  = 'sv-gh-token';
+const TODO_KEY   = 'spencer-ventures-todos';
+
+/* ─── Token Management ───────────────────────────────────────────────────────── */
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY) || null;
+}
+
+function setToken(token) {
+  if (token) localStorage.setItem(TOKEN_KEY, token.trim());
+  else localStorage.removeItem(TOKEN_KEY);
+}
+
+function showTokenModal(onSave) {
+  // Remove any existing modal
+  const existing = document.getElementById('gh-token-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'gh-token-modal';
+  overlay.style.cssText = `
+    position:fixed;inset:0;background:oklch(0% 0 0 / 0.45);z-index:9999;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  `;
+  overlay.innerHTML = `
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+      padding:28px;max-width:460px;width:100%;box-shadow:0 16px 48px oklch(10% 0 0 / 0.3);">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+        color:var(--accent);margin-bottom:8px;">One-time Setup</div>
+      <h2 style="font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;
+        font-style:italic;margin-bottom:10px;color:var(--text-primary);">Sync tasks with your dad</h2>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px;">
+        Enter a GitHub Personal Access Token so tasks are saved to the repo and visible on both devices.
+      </p>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.55;margin-bottom:18px;">
+        Create one at
+        <a href="https://github.com/settings/tokens/new?description=Spencer+Ventures+Tasks&scopes=repo"
+          target="_blank" rel="noopener"
+          style="color:var(--accent);text-decoration:none;">github.com/settings/tokens</a>
+        — use a <strong>Classic token</strong> with <code>repo</code> scope, or a
+        Fine-grained token scoped to <em>W1s3r/spencer-ventures</em> with
+        <strong>Contents read &amp; write</strong>.
+      </p>
+      <input id="gh-token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+        style="width:100%;background:var(--bg);border:1px solid var(--border-subtle);
+          border-radius:6px;color:var(--text-primary);font-family:inherit;font-size:13px;
+          padding:8px 11px;outline:none;margin-bottom:14px;box-sizing:border-box;">
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button id="gh-token-skip" style="background:transparent;border:1px solid var(--border-subtle);
+          border-radius:6px;color:var(--text-muted);font-family:inherit;font-size:12px;
+          font-weight:500;padding:7px 16px;cursor:pointer;">
+          Skip (local only)
+        </button>
+        <button id="gh-token-save" style="background:var(--accent-dim);border:1px solid var(--accent-border);
+          border-radius:6px;color:var(--accent);font-family:inherit;font-size:12px;
+          font-weight:600;padding:7px 16px;cursor:pointer;">
+          Save &amp; Sync
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const input = document.getElementById('gh-token-input');
+  input.focus();
+
+  document.getElementById('gh-token-save').onclick = () => {
+    const val = input.value.trim();
+    if (!val) { input.style.borderColor = 'var(--overdue-color)'; return; }
+    setToken(val);
+    overlay.remove();
+    if (onSave) onSave();
+  };
+  document.getElementById('gh-token-skip').onclick = () => {
+    overlay.remove();
+    setSyncStatus('Local only — no token set', 'var(--text-faint)');
+  };
+  input.onkeydown = (e) => {
+    if (e.key === 'Enter') document.getElementById('gh-token-save').click();
+    if (e.key === 'Escape') document.getElementById('gh-token-skip').click();
+  };
+}
+
+/* ─── Sync Status ────────────────────────────────────────────────────────────── */
+function setSyncStatus(text, color, autoClear) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = text;
+  el.style.color = color || 'var(--text-faint)';
+  if (autoClear) setTimeout(() => { el.textContent = ''; }, autoClear);
+}
+
 /* ─── To-Do State & Storage ──────────────────────────────────────────────────── */
-const TODO_KEY = 'spencer-ventures-todos';
 let todos = [];
 let todoFilter = 'all';
 let completedOpen = false;
-let hasUnsyncedChanges = false;
 
-// Load tasks: merge git-synced tasks.json with localStorage edits
-function loadTodos() {
-  let localTodos = [];
+// In-memory SHA of the latest tasks.json on GitHub (needed for PUT commits)
+let _ghFileSha = null;
+
+/* ─── Load tasks from GitHub ─────────────────────────────────────────────────── */
+async function loadTodos() {
+  setSyncStatus('Loading…', 'var(--text-faint)');
   try {
-    const raw = localStorage.getItem(TODO_KEY);
-    localTodos = raw ? JSON.parse(raw) : [];
-  } catch(e) { localTodos = []; }
+    // Bust cache with timestamp so both users always get latest
+    const res = await fetch(GH_RAW + '?t=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      todos = Array.isArray(data.tasks) ? data.tasks : (Array.isArray(data) ? data : []);
+    } else {
+      todos = [];
+    }
+  } catch(e) {
+    todos = [];
+  }
+  setSyncStatus('', '');
+  renderTodos();
 
-  // Try loading tasks.json (git-synced source of truth)
-  let syncedTodos = [];
+  // Also fetch via API to get the SHA (needed for later commits)
+  const token = getToken();
+  if (token) _fetchGhSha(token);
+}
+
+async function _fetchGhSha(token) {
   try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'tasks.json', false); // synchronous
-    xhr.send();
-    if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
-      syncedTodos = JSON.parse(xhr.responseText);
+    const res = await fetch(GH_API, {
+      headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      _ghFileSha = data.sha || null;
     }
-  } catch(e) { syncedTodos = []; }
+  } catch(e) { /* ignore */ }
+}
 
-  // Merge: localStorage wins for tasks with matching IDs (has latest edits),
-  // synced adds any tasks from the other person not yet in localStorage
-  if (syncedTodos.length === 0 && localTodos.length > 0) {
-    todos = localTodos;
-  } else if (localTodos.length === 0 && syncedTodos.length > 0) {
-    todos = syncedTodos;
-  } else {
-    const localMap = new Map(localTodos.map(t => [t.id, t]));
-    const syncedMap = new Map(syncedTodos.map(t => [t.id, t]));
+/* ─── Save tasks to GitHub ───────────────────────────────────────────────────── */
+function saveTodos() {
+  renderTodos();
+  _scheduleGhPush();
+}
 
-    // Start with all local tasks
-    const merged = new Map(localMap);
+let _pushTimer = null;
+function _scheduleGhPush() {
+  clearTimeout(_pushTimer);
+  _pushTimer = setTimeout(_pushToGitHub, 800);
+}
 
-    // Add any synced tasks not in local (from the other person)
-    for (const [id, task] of syncedMap) {
-      if (!merged.has(id)) {
-        merged.set(id, task);
-      }
-    }
-
-    todos = Array.from(merged.values());
+async function _pushToGitHub() {
+  const token = getToken();
+  if (!token) {
+    // No token — show modal and re-try after setup
+    setSyncStatus('⚠ No token', 'var(--accent)');
+    showTokenModal(() => {
+      setSyncStatus('Token saved — syncing…', 'var(--text-faint)');
+      setTimeout(_pushToGitHub, 300);
+    });
+    return;
   }
 
-  saveTodos(); // persist the merged result to localStorage
-  updateSyncStatus();
-}
+  setSyncStatus('Saving…', 'var(--text-faint)');
 
-function saveTodos() {
-  localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-  pushToServer();
-}
+  const payload = {
+    tasks: todos,
+    lastUpdated: new Date().toISOString().slice(0, 10)
+  };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
 
-// Auto-push to local server (which writes tasks.json + git pushes)
-let pushDebounce = null;
-function pushToServer() {
-  clearTimeout(pushDebounce);
-  pushDebounce = setTimeout(async () => {
-    const status = document.getElementById('sync-status');
-    try {
-      const res = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(todos, null, 2)
-      });
-      if (res.ok) {
-        if (status) {
-          status.textContent = 'Synced';
-          status.style.color = 'var(--stage-launched)';
-          setTimeout(() => { status.textContent = ''; }, 2000);
-        }
-      }
-    } catch(e) {
-      // Server not running — running from file://, fallback to clipboard sync
-      if (status) {
-        status.textContent = 'Local only (start server for sync)';
-        status.style.color = 'var(--text-faint)';
-      }
+  // Need SHA for updates; fetch it if we don't have it yet
+  if (!_ghFileSha) await _fetchGhSha(token);
+
+  const body = {
+    message: 'Update tasks.json via dashboard',
+    content,
+    ..._ghFileSha ? { sha: _ghFileSha } : {}
+  };
+
+  try {
+    const res = await fetch(GH_API, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      _ghFileSha = data.content && data.content.sha ? data.content.sha : _ghFileSha;
+      setSyncStatus('Saved ✓', 'var(--stage-launched)', 2500);
+    } else if (res.status === 401 || res.status === 403) {
+      setSyncStatus('⚠ Token invalid', 'var(--overdue-color)');
+      showTokenModal(() => setTimeout(_pushToGitHub, 300));
+    } else if (res.status === 409) {
+      // Conflict — SHA stale, fetch new SHA and retry once
+      setSyncStatus('Conflict — retrying…', 'var(--text-faint)');
+      _ghFileSha = null;
+      await _fetchGhSha(token);
+      setTimeout(_pushToGitHub, 500);
+    } else {
+      const err = await res.text();
+      console.error('GitHub save failed:', res.status, err);
+      setSyncStatus('⚠ Save failed (' + res.status + ')', 'var(--overdue-color)');
     }
-  }, 500); // debounce 500ms to batch rapid changes
+  } catch(e) {
+    console.error('GitHub push error:', e);
+    setSyncStatus('⚠ Network error', 'var(--overdue-color)');
+  }
 }
 
 function genId() {
@@ -1581,8 +1715,8 @@ document.getElementById('header-date').textContent = new Date().toLocaleDateStri
 renderSummary();
 renderToolbar();
 renderCards();
-loadTodos();
-renderTodos();
+renderTodos(); // render empty state immediately while GitHub loads
+loadTodos();   // async — fetches from GitHub, then re-renders
 </script>
 </body>
 </html>
