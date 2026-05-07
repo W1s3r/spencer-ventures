@@ -1,14 +1,4 @@
 {
-  "tasks": [
-    {
-      "id": "mouxobolmhjb6",
-      "title": "Add API token!",
-      "assignee": "dad",
-      "priority": "high",
-      "due": "2026-05-08",
-      "complete": false,
-      "createdAt": "2026-05-07T03:35:33.669Z"
-    }
-  ],
+  "tasks": [],
   "lastUpdated": "2026-05-07"
 }
