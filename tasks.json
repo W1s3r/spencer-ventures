@@ -6,8 +6,17 @@
       "assignee": "dad",
       "priority": "high",
       "due": "2026-05-08",
-      "complete": true,
+      "complete": false,
       "createdAt": "2026-05-07T03:50:08.000Z"
+    },
+    {
+      "id": "mouyx80464c38",
+      "title": "Check the box!",
+      "assignee": "dad",
+      "priority": "high",
+      "due": null,
+      "complete": false,
+      "createdAt": "2026-05-07T04:10:28.420Z"
     }
   ],
   "lastUpdated": "2026-05-07"
